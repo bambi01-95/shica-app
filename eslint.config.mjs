@@ -3,6 +3,9 @@ import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 
 const eslintConfig = defineConfig([
+  {
+    files: ["src/**/*.{js,jsx,ts,tsx}"], // 👈 src配下のみを対象にする
+  },
   ...nextVitals,
   ...nextTs,
   // Override default ignores of eslint-config-next.
