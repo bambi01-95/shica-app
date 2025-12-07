@@ -207,3 +207,4 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
     </div>
   );
 };
+export default CodeEditor;

@@ -23,7 +23,7 @@ export function useVM() {
         }
 
         const script = document.createElement("script");
-        script.src = "/shikada/js/shica.js";
+        script.src = "/ide/js/shica.js";
         script.async = true;
         
         script.onload = () => {
@@ -31,7 +31,7 @@ export function useVM() {
           const instance = (window as any).Module;
           if (instance) {
             // locateFileやonRuntimeInitializedをセット
-            instance.locateFile = (path: string) => `/shikada/js/${path}`;
+            instance.locateFile = (path: string) => `/ide/js/${path}`;
             instance.onRuntimeInitialized = () => {
               console.log("✅ WASM initialized");
 

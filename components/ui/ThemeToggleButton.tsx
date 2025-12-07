@@ -1,7 +1,7 @@
 // components/ThemeToggleButton.js
 "use client"; // App Routerの場合
 
-import { useTheme } from "@/contexts/ThemeContext";
+import { useTheme } from "../../contexts/ThemeContext";
 
 export default function ThemeToggleButton(style: React.CSSProperties = {}) {
   const { theme, toggleTheme } = useTheme();
