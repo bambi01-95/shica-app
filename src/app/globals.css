@@ -1,8 +1,104 @@
 @import "tailwindcss";
+@tailwind components;
+@tailwind utilities;
+@tailwind base;
 
+/* app.css または globals.css */
+
+/* ライトテーマの変数 */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-text-primary: #333;
+  --color-text-secondary: #666;
+  --color-background-primary: #fff;
+  --color-background-secondary: #f0f0f0;
+  --color-background-secondary-hover: #e0e0e0; /* ホバー時の背景色 */
+  /* ...その他のライトテーマの変数 */
+  --color-sidebar-item-active: linear-gradient(
+      90deg,
+      rgba(255, 152, 0, 0.1),
+      rgba(255, 152, 0, 0.15)
+    ),
+    #ff9800;
+  --color-sidebar-icon: linear-gradient(135deg, #ff9800, #ffb74d);
+  /* コードエディタの背景色 */
+  --color-code-background1000: rgb(
+    255,
+    255,
+    255
+  ); /* Tailwindの`bg-white`に近い色 */
+  --color-code-background900: rgb(
+    243 244 246
+  ); /* Tailwindの`bg-gray-100`に近い色 */
+  --color-code-background800: rgb(
+    229 231 235
+  ); /* Tailwindの`bg-gray-200`に近い色 */
+  --color-code-background700: rgb(
+    209 213 219
+  ); /* Tailwindの`bg-gray-300`に近い色 */
+  --color-code-background600: rgb(
+    156 163 175
+  ); /* Tailwindの`bg-gray-400`に近い色 */
+  --color-code-text: #333;
+  --color-code-text-secondary: #6b7280; /* Tailwindの`text-gray-500`に近い色 */
+}
+
+/* ダークテーマの変数 */
+html.dark {
+  --color-text-primary: #eee;
+  --color-text-secondary: #bbb;
+  --color-background-primary: rgb(
+    17,
+    24,
+    39
+  ); /* Tailwindの`bg-gray-900`に近い色 */
+  --color-background-secondary: #2d3748; /* Tailwindの`bg-gray-700`に近い色 */
+  /* ダークテーマのホバー時の背景色 */
+  --color-background-secondary-hover: #374151; /* Tailwindの`bg-gray-600`に近い色 */
+
+  /* ...その他のダークテーマの変数 */
+  --color-sidebar-item-active: linear-gradient(
+      90deg,
+      rgba(255, 152, 0, 0.1),
+      rgba(255, 152, 0, 0.15)
+    ),
+    #ffca7b;
+  --color-sidebar-icon: linear-gradient(135deg, #ffca7b, #ffb74d);
+
+  /* コードエディタの背景色 */
+  --color-code-background1000: rgb(
+    0,
+    0,
+    0
+  ); /* Tailwindの`bg-gray-900`に近い色 */
+  --color-code-background900: rgb(
+    17,
+    24,
+    39
+  ); /* Tailwindの`bg-gray-900に近い色 */
+  --color-code-background800: rgb(
+    31,
+    41,
+    55
+  ); /* Tailwindの`bg-gray-800`に近い色 */
+  --color-code-background700: rgb(
+    55,
+    65,
+    81
+  ); /* Tailwindの`bg-gray-700`に近い色 */
+  --color-code-background600: rgb(
+    75,
+    85,
+    99
+  ); /* Tailwindの`bg-gray-600`に近い色 */
+  --color-code-text: #f8fafc;
+  --color-code-text-secondary: #9ca3af; /* Tailwindの`text-gray-400`に近い色 */
+}
+
+/* 基本的なスタイル */
+body {
+  color: var(--color-text-primary);
+  background-color: var(--color-background-primary);
+  transition: background-color 0.3s ease, color 0.3s ease; /* テーマ切り替え時のアニメーション */
 }
 
 @theme inline {
@@ -19,8 +115,277 @@
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.page-list-component {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.title-component {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.image-text-component {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.feature-cards-component {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px;
+}
+
+.title-component h1 {
+  font-size: 3.5rem;
+  background: linear-gradient(45deg, #ff6b35, #f9ca24);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 15px;
+  font-weight: 700;
+  letter-spacing: -2px;
+}
+
+.title-component .subtitle {
+  font-size: 1.3rem;
+  color: #666;
+  font-weight: 300;
+  opacity: 0.8;
+}
+
+.description-component {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 35px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+  position: relative;
+  overflow: hidden;
+}
+
+.description-component::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ff6b35, #f9ca24);
+}
+
+.description-component h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: 600;
+}
+
+.description-component p {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.code-block-component {
+  background: #1a1a1a;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.code-block-component::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: linear-gradient(90deg, #ff6b35, #f9ca24);
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+}
+
+.code-block-component::after {
+  content: "●●●";
+  position: absolute;
+  top: 12px;
+  left: 15px;
+  color: #fff;
+  font-size: 12px;
+  letter-spacing: 3px;
+}
+
+.code-block-header {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+  color: #888;
+  font-family: "Courier New", monospace;
+}
+.code-white-header {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+  color: #888;
+  font-family: "Courier New", monospace;
+}
+
+.code-block-content {
+  background: #2d2d2d;
+  border-radius: 8px;
+  padding: 20px;
+  font-family: "Courier New", monospace;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #f8f8f2;
+  overflow-x: auto;
+  border: 1px solid #444;
+}
+
+.code-block-content pre {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.code-span-component {
+  display: inline-block;
+  background: linear-gradient(135deg, #ff6b35, #f9ca24);
+  color: blue;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-family: "Courier New", monospace;
+  font-size: 0.9em;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+  transition: all 0.3s ease;
+}
+
+.code-span-component:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+}
+
+.copy-button {
+  position: absolute;
+  top: 50px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.3s ease;
+}
+
+.copy-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.code-button {
+  background: var(--color-code-background700);
+  color: var(--color-code-text);
+}
+.code-button:hover {
+  background: linear-gradient(
+    135deg,
+    var(--color-code-background700),
+    var(--color-code-background600)
+  );
+  color: var(--color-code-text-secondary);
+  transform: scale(1.05);
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.glow-effect {
+  position: relative;
+  animation: pulse 2s infinite;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@media (max-width: 768px) {
+  .title-component h1 {
+    font-size: 2.5rem;
+  }
+
+  .title-component .subtitle {
+    font-size: 1.1rem;
+  }
+
+  .description-component {
+    padding: 25px;
+  }
+
+  .code-block-component {
+    padding: 20px;
+  }
 }
