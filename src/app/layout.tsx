@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: "Shica Official Site",
   description: "Official website of Shica Lang",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/Shica.ico",
   },
 };
 
