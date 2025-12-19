@@ -150,11 +150,33 @@ const ShicaPage = () => {
     [disconnectUserFromTopic]
   );
 
+  const addWebRtcBroadcastRef = useRef(_addWebRtcBroadcast);
+  const sendWebRtcBroadcastRef = useRef(_sendWebRtcBroadcast);
+  const removeWebRtcBroadcastRef = useRef(_removeWebRtcBroadcast);
+
+  useEffect(() => {
+    addWebRtcBroadcastRef.current = _addWebRtcBroadcast;
+  }, [_addWebRtcBroadcast]);
+
+  useEffect(() => {
+    sendWebRtcBroadcastRef.current = _sendWebRtcBroadcast;
+  }, [_sendWebRtcBroadcast]);
+
+  useEffect(() => {
+    removeWebRtcBroadcastRef.current = _removeWebRtcBroadcast;
+  }, [_removeWebRtcBroadcast]);
+
   useEffect(() => {
     if (!isReady) return;
-    (globalThis as any)._addWebRtcBroadcast = _addWebRtcBroadcast;
-    (globalThis as any)._sendWebRtcBroadcast = _sendWebRtcBroadcast;
-    (globalThis as any)._removeWebRtcBroadcast = _removeWebRtcBroadcast;
+    (globalThis as any)._addWebRtcBroadcast = (
+      ...args: Parameters<typeof _addWebRtcBroadcast>
+    ) => addWebRtcBroadcastRef.current?.(...args);
+    (globalThis as any)._sendWebRtcBroadcast = (
+      ...args: Parameters<typeof _sendWebRtcBroadcast>
+    ) => sendWebRtcBroadcastRef.current?.(...args);
+    (globalThis as any)._removeWebRtcBroadcast = (
+      ...args: Parameters<typeof _removeWebRtcBroadcast>
+    ) => removeWebRtcBroadcastRef.current?.(...args);
     console.log("🌐 Registered WebRTC bridge functions to globalThis");
 
     return () => {
@@ -162,12 +184,7 @@ const ShicaPage = () => {
       delete (globalThis as any)._sendWebRtcBroadcast;
       delete (globalThis as any)._removeWebRtcBroadcast;
     };
-  }, [
-    isReady,
-    _addWebRtcBroadcast,
-    _sendWebRtcBroadcast,
-    _removeWebRtcBroadcast,
-  ]);
+  }, [isReady]);
 
   //for user sample code
   const [clickXY, setClickXY] = useState<{ x: number; y: number }>({
@@ -248,13 +265,6 @@ const ShicaPage = () => {
     if (!Module || !isReady) return;
     const numErrors = Module.ccall("getNumOfErrorMsg", "number", [], []);
     if (numErrors > 0) {
-      const errorType = [
-        "WARNING",
-        "ERROR",
-        "FATAL",
-        "DEVELOPER",
-        "UNSUPPORTED",
-      ];
       for (let i = 0; i < numErrors; i++) {
         const errorMsg = Module.ccall("getErrorMsg", "string", [], []);
         const errorLevel = errorMsg.charAt(0);
@@ -270,12 +280,17 @@ const ShicaPage = () => {
             logLevel = LogLevel.INFO;
             break;
           case "2":
+            logLevel = LogLevel.LOG;
+            const logMessage = `[${errorLine} %] ${errorMessage}`;
+            addLog(logLevel, logMessage);
+            continue;
+          case "3":
             logLevel = LogLevel.WARN;
             break;
-          case "3":
+          case "4":
             logLevel = LogLevel.ERROR;
             break;
-          case "4":
+          case "5":
             logLevel = LogLevel.FATAL;
             break;
           default:
@@ -323,7 +338,6 @@ const ShicaPage = () => {
         agentDataPtr + i * 36 + agentObjectOffset.vy,
         "i32"
       );
-      console.log(`Agent[${index}] = x: ${x}, y: ${y}, vx: ${vx}, vy: ${vy}`);
     }
     // END TEST
 
@@ -428,13 +442,13 @@ const ShicaPage = () => {
       intervalRef.current = setInterval(() => {
         if (!Module || !isReady) return;
         Module.setValue(Module.timerPtr, time, "i32");
-        console.log("\x1b[31m%s\x1b[0m", "Running web codes...");
         const res = Module.ccall("executeWebCodes", "number", [], []);
         if (res !== 0) {
           addLog(LogLevel.ERROR, "run failed - error in web codes");
           clearInterval(intervalRef.current!);
           return;
         }
+        processError();
         const agentptr = Module.ccall(
           "getAnAgentDataPtr",
           "number",
@@ -449,7 +463,6 @@ const ShicaPage = () => {
             agentptr + offset + agentObjectOffset.index,
             "i32"
           );
-          console.log("\x1b[32m%s\x1b[0m", `Agent[${index}] is updating...`);
           const x = Module.getValue(
             agentptr + offset + agentObjectOffset.x,
             "i32"
@@ -480,9 +493,6 @@ const ShicaPage = () => {
             agentptr + offset + agentObjectOffset.y,
             robot.y,
             "i32"
-          );
-          console.log(
-            `Agent ${i} - x: ${x}, y: ${y}, vx: ${vx}, vy: ${vy} r: ${robot.r}, g: ${robot.g}, b: ${robot.b}`
           );
         }
         setForceUpdate((prev) => prev + 1); // 位置更新を画面に反映
@@ -515,6 +525,7 @@ const ShicaPage = () => {
     if (!Module || !isReady) return;
     const rect = mapRef.current?.getBoundingClientRect();
     if (!rect) return;
+    console.log(`Click at (${x}, ${y}), rect:`, rect);
     const xc = x - rect.left - 20 < 0 ? 0 : Math.round(x - rect.left - 20);
     const yc = y - rect.top - 20 < 0 ? 0 : Math.round(y - rect.top - 20);
     if (isRunning) {
