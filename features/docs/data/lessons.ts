@@ -201,9 +201,17 @@ export const lessons: Lesson[] = [
         filename: "receiver.shica",
       },
       {
+        type: "paragraph",
+        text: "In this example, the <b>Receiver</b> agent listens for messages on <b>channel1</b>. When a message is received, it prints the message and the sender's address to the console.",
+      },
+      {
         type: "code",
         code: '// Sender agent\nvar channle = broadcast("channel1", "scicret");\nstate Sender(){\n\tclickEH(){\n\t\tchannle.send("Hello from Sender!");\n\t}\n}',
         filename: "sender.shica",
+      },
+      {
+        type: "paragraph",
+        text: "In this example, the <b>Sender</b> agent sends a message to <b>channel1</b> whenever the button is clicked.",
       },
       {
         type: "info",
