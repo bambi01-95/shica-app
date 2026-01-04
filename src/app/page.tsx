@@ -1,6 +1,7 @@
 "use client";
 
 import Header from "../../features/docs/components/Header";
+import Footer from "../../features/docs/components/Footer";
 import LessonContent from "../../features/docs/components/LessonContent";
 import { home } from "../../features/docs/data/home";
 
@@ -24,6 +25,7 @@ export function ShicaHomePage() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

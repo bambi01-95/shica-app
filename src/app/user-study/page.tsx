@@ -23,7 +23,6 @@ export function UserStudyPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="px-5 mb-20 lg:px-0">
           <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr]">
@@ -47,7 +46,6 @@ export function UserStudyPage() {
           </div>
         </div>
       </div>
-    </div>
   );
 }
 export default UserStudyPage;
