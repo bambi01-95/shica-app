@@ -53,6 +53,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
       <pre
         className={`${robotoMono.className} p-4 text-sm leading-6 overflow-x-auto whitespace-pre`}
         style={{ color: "var(--color-text-primary)" }}
+        translate="no"
         dangerouslySetInnerHTML={{
           __html: highlightShicaCode(code),
         }}
@@ -62,7 +63,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
       {output && (
         <div className="px-4 py-2 bg-gray-200 text-gray-500 text-sm border-t border-gray-200">
           <strong className="block mb-1">Output:</strong>
-          <pre className="whitespace-pre-wrap">{output}</pre>
+          <pre className="whitespace-pre-wrap" translate="no">{output}</pre>
         </div>
       )}
     </div>
