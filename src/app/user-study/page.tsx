@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Header from "../../../features/docs/components/Header";
 import Sidebar from "../../../features/docs/components/Sidebar";
 import LessonContent from "../../../features/docs/components/LessonContent";
 import NavigationButtons from "../../../features/docs/components/NavigationButtons";

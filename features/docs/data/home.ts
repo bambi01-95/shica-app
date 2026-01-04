@@ -144,6 +144,15 @@ export const home: Lesson[] = [
           "Shica is an evolving project. Its language specification, runtime, and tooling continue to develop in pursuit of more intuitive " +
           "and expressive programming for complex, interactive systems.",
       },
+      {
+        type: "heading",
+        text: "Our Laboratory",
+      },
+      {
+        type: "paragraph",
+        text:
+        "Kyoto University of Advanced Science - Programming Systems Laboratory."
+      }
     ],
   },
 ];
