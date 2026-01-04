@@ -24,11 +24,6 @@ export function UserStudyPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header
-        title="W-Shica User Study"
-        subtitle="Guided tasks to explore W-Shica features."
-      />
-
       <div className="max-w-7xl mx-auto">
         <div className="px-5 mb-20 lg:px-0">
           <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr]">
