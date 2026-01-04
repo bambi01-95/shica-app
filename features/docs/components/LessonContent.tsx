@@ -3,6 +3,7 @@ import { Lesson, ContentSection } from "../types/lesson";
 import CodeBlock from "./CodeBlock";
 import InfoBox from "./InfoBox";
 import TryIt from "./TryIt";
+import Figure from "./Figure";
 
 interface LessonContentProps {
   lesson: Lesson;
@@ -33,7 +34,7 @@ function LessonContent({ lesson }: LessonContentProps) {
 
           {section.type === "list" && (
             <ul className="list-disc ml-6 space-y-1 text-slate-700">
-              {section.items?.map((item: any, i: number) => (
+              {section.items?.map((item: string, i: number) => (
                 <li className="text-lg" key={i}>
                   {item}
                 </li>
@@ -51,6 +52,10 @@ function LessonContent({ lesson }: LessonContentProps) {
             <div className="my-6">
               <InfoBox text={section.text || ""} />
             </div>
+          )}
+
+          {section.type === "figure" && section.src && (
+            <Figure src={section.src} altText={section.altText || ""} />
           )}
 
           {section.type === "tryit" && (
