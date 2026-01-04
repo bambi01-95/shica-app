@@ -13,7 +13,6 @@ import SizeWarningPage from "../../../features/ide/components/SizeWaring";
 import ThemeToggleButton from "../../../components/ui/ThemeToggleButton";
 
 import { Roboto } from "next/font/google";
-import Script from "next/script";
 import { sampleCodes } from "./sample";
 
 const roboto = Roboto({

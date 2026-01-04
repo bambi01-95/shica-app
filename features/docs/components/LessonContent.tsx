@@ -44,7 +44,7 @@ function LessonContent({ lesson }: LessonContentProps) {
 
           {section.type === "code" && (
             <div className="my-6">
-              <CodeBlock code={section.code || ""} output={section.output} />
+              <CodeBlock code={section.code || ""} output={section.output} filename={section.filename || ""}/>
             </div>
           )}
 
