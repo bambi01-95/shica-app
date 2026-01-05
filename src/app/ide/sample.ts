@@ -34,9 +34,9 @@ stt state(){
 
 
 const timerEOSample: string = `// Timer Event Sample
-var t = time();
+var t = timer();
 stt state(){
-  t.secondEH(int sec){
+  t.sec(int sec){
     print("1 second passed", sec);
   }
 }`;
@@ -46,8 +46,8 @@ stt state(){
   entryEH(){
     setVX(5);
   }
-  collisionEH(){
-    print("collision detected!");
+  collisionEH(int x,int y){
+    print("collision at direction x:", x, " y:", y);
     setVX(-getVX());
   }
 }`;
@@ -90,6 +90,7 @@ stt state1(){
   entryEH(){
     setVX(5);
     setColor(225, 255, 255);
+    print("state1 entered");
   }
   clickEH(int x,int y){stt state2;}
 }
@@ -98,6 +99,7 @@ stt state2(){
   entryEH(){
     setVX(-5);
     setColor(255, 0, 0);
+    print("state2 entered");
   }
   clickEH(int x,int y){stt state1;}
 }`; 
@@ -107,40 +109,125 @@ var chat = broadcast("shica","pwd");
 
 stt off(){
   entryEH(){
-    setColor(255, 0, 0);
+    setColor(0, 0, 0);
+    print("Im OFF");
   }
-  clickEH(int x,int y){
-    chat.send("Button OFF clicked",0);
+  touchEH(int c){
     stt on;
   }
 }
   
-stt on{
+stt on(){
   entryEH(){
-    setColor(0, 255, 0);
+    chat.send("Im ON",0);
+    setColor(255, 0, 0);
+    print("Im ON");
   }
-  clickEH(int x,int y){
-    chat.send("Button ON clicked",0);
-    stt off;
-  }
+  touchEH(int c){stt off;}
   chat.received(str from, str msg){
-    print("msg from ", from, ": ", msg);
     stt off;
   }
 }`;
 
+const task1Sample: string = `// Greeting Sample
+// 3 states: morning, afternoon, evening
+// state changes every 3 seconds
+// when clicked, it greets according to the time of day
+
+stt morning(){
+  entryEH(){setColor(255, 223, 186); }// light orange
+  timerEH(int sec: sec==3){stt afternoon;}
+  clickEH(int x, int y){print("Good morning!");}
+}
+
+stt afternoon(){
+  entryEH(){
+    setColor(255, 255, 186); // light yellow
+  }
+  timerEH(int sec: sec==3){stt evening;}
+  clickEH(int x, int y){
+    print("Good afternoon!");
+  }
+}
+
+stt evening(){
+  entryEH(){
+    setColor(186, 225, 255); // light blue
+  }
+  timerEH(int sec: sec==3){stt morning;}
+  clickEH(int x, int y){
+    print("Good evening!");
+  }
+}`;
+
+// task 2 using multiple collisionEH
+const task2Sample: string = `// Particle Sample
+stt moving(){
+  int vx = 5;
+  int vy = 5;
+  entryEH(){
+    setVX(vx);
+    setVY(vy);
+  }
+  collisionEH(int x, int y){ // left collision
+    print(x, y);
+    if(x!=0)setVX(-vx);
+  }
+  collisionEH(int x, int y){ // right collision
+    print(1);
+    if(x==-1)setVX(-vx);
+  }
+  collisionEH(int x, int y){ // top collision
+    print(2);
+    if(y==1)setVY(vy);
+  }
+  collisionEH(int x, int y){ // bottom collision
+    print(3);
+    if(y!=0)setVY(-vy);
+  }
+  clickEH(int x,int y){
+    print("moving stop state");
+  }
+}
+`;
+// Task 2 using if statement
+const task22Sample: string = `// Particle Sample with improved collision handling
+// Particle Sample with improved collision handling
+stt moving(){
+  int vx = 5;
+  int vy = 5;
+  entryEH(){
+    setVX(vx);
+    setVY(vy);
+  }
+  collisionEH(int xDir, int yDir){
+   if(xDir == 1) setVX(5); // left collision
+   if(xDir == -1) setVX(-5); // right collision
+   if(yDir == 1) setVY(5); // top collision
+   if(yDir == -1) setVY(-5); // bottom collision
+   print(xDir,yDir);
+  }
+}
+`;
+
+
 
 
 const sampleCodes: string[] = [
-    timerSample,
-    touchSample,
-    collisionSample,
-    radioButtonGroupSample,
-    WebRtcReceiverSample_v2,
-    webRtcSenderSample,
-    webRtcReceiverSample,
-    stateChangeSample,
-    clickSample,
+task2Sample,
+task1Sample,
+task22Sample,
+timerEOSample,
+radioButtonGroupSample,
+radioButtonGroupSample,
+WebRtcReceiverSample_v2,
+webRtcSenderSample,
+timerSample,
+touchSample,
+collisionSample,
+radioButtonGroupSample,
+webRtcReceiverSample,
+clickSample,
 ];
 
 

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 
 import { useShicaWebRTC } from "../../../features/ide/hooks/optbroadcast";
 import { useVM } from "../../../features/ide/hooks/useShica";
@@ -14,7 +14,6 @@ import ThemeToggleButton from "../../../components/ui/ThemeToggleButton";
 
 import { Roboto } from "next/font/google";
 import { sampleCodes } from "./sample";
-
 const roboto = Roboto({
   subsets: ["latin", "latin-ext"],
   weight: ["400", "600", "500", "700"],
@@ -29,20 +28,6 @@ const hexToRgb = (hex: string) => {
   return { r, g, b };
 };
 
-interface agentObject {
-  index: number;
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  isClick: number;
-  distance: number;
-  status: number;
-  red: number;
-  green: number;
-  blue: number;
-  isLEDOn: number;
-}
 const agentObjectOffset = {
   index: 0,
   x: 4,
@@ -68,25 +53,36 @@ export interface Robot {
 
 // Example codes for initial state
 
-interface Agent {
+interface Agent{
   uid: number;
   filename: string;
   code: string;
   compiled: boolean;
 }
+type CodeItem = {
+  filename: string;
+  code: string;
+  compiled: boolean;
+};
+
 const ShicaPage = () => {
-  // <CodeEditor>のコード管理
-  const [codes, setCodes] = useState<
-    { filename: string; code: string; compiled: boolean }[]
-  >([
-    {
-      filename: "Agent0",
-      code:
-        sampleCodes[0] ||
-        "stt s1(){\n    clickEH(x,y){\n        setXY(x,y);\n    }\n}",
-      compiled: false,
-    },
-  ]);
+  const initialCodes = useMemo<CodeItem[]>(
+    () => [
+      {
+        filename: "Agent0",
+        code:
+          sampleCodes[0] ||
+          "stt s1(){\n    clickEH(x,y){\n        setXY(x,y);\n    }\n}",
+        compiled: false,
+      },
+    ],
+    []
+  );
+
+  const [codes, setCodes] = useState<CodeItem[]>(initialCodes);
+  const [hydrated, setHydrated] = useState(false);
+
+
   const updateItem = (index: number, newValue: string) => {
     setCodes((prev) =>
       prev.map((item, i) => (i === index ? { ...item, code: newValue } : item))
@@ -109,45 +105,29 @@ const ShicaPage = () => {
   const [logs, setLogs] = useState<Log[]>([]);
 
   const {
-    initializeTopicHost,
-    addUser,
-    connectUserToTopic,
-    sendMessage,
-    disconnectUserFromTopic,
-    userSessions,
+     addUser,
+     connectUserToTopic,
+     sendMessage,
+     disconnectUserFromTopic,
+     userSessions,
   } = useShicaWebRTC(Module, isReady);
 
-  const _addWebRtcBroadcast = useCallback(
-    async (number: number, channel: string, password: string, ptr: any) => {
-      console.log(
-        `🛜 Adding WebRTC Broadcast User: ${number} to channel: ${channel}`
-      );
-      await addUser(number, ptr);
-      console.log(
-        `🔍 After addUser: session exists=${userSessions.has(number)}`
-      );
-      await connectUserToTopic(number, channel, ptr);
-      console.log(`✅ User ${number} fully connected to ${channel}`);
-    },
-    [addUser, connectUserToTopic, userSessions]
-  );
+  const _addWebRtcBroadcast = useCallback(async (number: number, channel: string, password: string, ptr: any) => {
+    console.log(`🛜 Adding WebRTC Broadcast User: ${number} to channel: ${channel}`);
+    await addUser(number, ptr);
+    console.log(`🔍 After addUser: session exists=${userSessions.has(number)}`);
+    await connectUserToTopic(number, channel, ptr);
+    console.log(`✅ User ${number} fully connected to ${channel}`);
+  }, [addUser, connectUserToTopic, userSessions]);
 
-  const _sendWebRtcBroadcast = useCallback(
-    (index: number, msg: string, num: number) => {
-      console.log(
-        `📡 Sending WebRTC Broadcast Message from User: ${index} to ${num}`
-      );
-      sendMessage(index, msg);
-    },
-    [sendMessage]
-  );
+  const _sendWebRtcBroadcast = useCallback((index: number, msg: string, num: number) => {
+    console.log(`📡 Sending WebRTC Broadcast Message from User: ${index} to ${num}`);
+    sendMessage(index, msg);
+  }, [sendMessage]);
 
-  const _removeWebRtcBroadcast = useCallback(
-    (number: number, channel: string) => {
-      disconnectUserFromTopic(number, channel);
-    },
-    [disconnectUserFromTopic]
-  );
+  const _removeWebRtcBroadcast = useCallback((number: number, channel: string) => {
+    disconnectUserFromTopic(number, channel);
+  }, [disconnectUserFromTopic]);
 
   const addWebRtcBroadcastRef = useRef(_addWebRtcBroadcast);
   const sendWebRtcBroadcastRef = useRef(_sendWebRtcBroadcast);
@@ -167,15 +147,12 @@ const ShicaPage = () => {
 
   useEffect(() => {
     if (!isReady) return;
-    (globalThis as any)._addWebRtcBroadcast = (
-      ...args: Parameters<typeof _addWebRtcBroadcast>
-    ) => addWebRtcBroadcastRef.current?.(...args);
-    (globalThis as any)._sendWebRtcBroadcast = (
-      ...args: Parameters<typeof _sendWebRtcBroadcast>
-    ) => sendWebRtcBroadcastRef.current?.(...args);
-    (globalThis as any)._removeWebRtcBroadcast = (
-      ...args: Parameters<typeof _removeWebRtcBroadcast>
-    ) => removeWebRtcBroadcastRef.current?.(...args);
+    (globalThis as any)._addWebRtcBroadcast = (...args: Parameters<typeof _addWebRtcBroadcast>) =>
+      addWebRtcBroadcastRef.current?.(...args);
+    (globalThis as any)._sendWebRtcBroadcast = (...args: Parameters<typeof _sendWebRtcBroadcast>) =>
+      sendWebRtcBroadcastRef.current?.(...args);
+    (globalThis as any)._removeWebRtcBroadcast = (...args: Parameters<typeof _removeWebRtcBroadcast>) =>
+      removeWebRtcBroadcastRef.current?.(...args);
     console.log("🌐 Registered WebRTC bridge functions to globalThis");
 
     return () => {
@@ -184,13 +161,13 @@ const ShicaPage = () => {
       delete (globalThis as any)._removeWebRtcBroadcast;
     };
   }, [isReady]);
-
+  
   //for user sample code
   const [clickXY, setClickXY] = useState<{ x: number; y: number }>({
     x: 0,
     y: 0,
   });
-  const [fps, setFps] = useState(500);
+  const [fps, setFps] = useState(200);
 
   const [rgb, setRgb] = useState({ r: 0, g: 0, b: 0 });
 
@@ -219,7 +196,7 @@ const ShicaPage = () => {
     ]);
     setSelectedIndex(codes.length); // 新しく追加したファイルを選択
     addRobot();
-    addUser(codes.length, 0); //WebRTC OptBroadcast user add
+    addUser(codes.length, 0);//WebRTC OptBroadcast user add
     const ret = Module?.ccall("addWebCode", "number", [], []);
     if (ret !== 0) {
       console.error("Failed to add web code");
@@ -315,7 +292,7 @@ const ShicaPage = () => {
       [0]
     );
     // TEST
-    //REVIEW
+//REVIEW
     for (let i = 0; i < 12; i++) {
       const index = Module.getValue(
         agentDataPtr + i * 36 + agentObjectOffset.index,
@@ -358,10 +335,10 @@ const ShicaPage = () => {
       } else {
         addLog(LogLevel.INFO, "Initialized web codes");
         addLog(LogLevel.SUCCESS, `touch ${codes[0].filename}`);
-
+        
         // Initialize WebRTC sessions for initial agents
         for (let i = 0; i < codes.length; i++) {
-          addUser(i, 0); // Add user with dummy pointer
+          addUser(i,0); // Add user with dummy pointer
           console.log(`🔧 Initialized WebRTC session for Agent ${i}`);
         }
       }
@@ -376,8 +353,8 @@ const ShicaPage = () => {
     const ret = Module.ccall(
       "compileWebCode",
       "number",
-      ["number", "string"],
-      [selectedIndex, selectedCode]
+      [ "number", "string"],
+      [ selectedIndex, selectedCode]
     );
     // change .shica to .stt, and meke output filename
     const outputFilename = codes[selectedIndex].filename.replace(
@@ -454,7 +431,7 @@ const ShicaPage = () => {
           ["number"],
           [0]
         );
-        //REVIEW
+//REVIEW
         for (let i = 0; i < codes.length; i++) {
           const robot = robotsRef.current[i];
           const offset = i * 36; // 4 bytes each for x, y, vx, vy
@@ -509,7 +486,7 @@ const ShicaPage = () => {
         }
       }
     }
-  }, [isRunning, Module, isReady, codes]);
+  }, [isRunning, Module, isReady]);
 
   const run = () => {
     if (!isCompiled) {
@@ -603,6 +580,41 @@ const ShicaPage = () => {
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
+
+//STORE CODE IN LOCALSTORAGE
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("codes");
+      if (saved) setCodes(JSON.parse(saved) as CodeItem[]);
+      const robotsSaved = localStorage.getItem("robots");
+      if (robotsSaved) robotsRef.current = JSON.parse(robotsSaved);
+
+    } catch {
+      // ignore
+    } finally {
+      setHydrated(true);
+    }
+  }, [initialCodes]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    localStorage.setItem("codes", JSON.stringify(codes));
+    localStorage.setItem("robots", JSON.stringify(robotsRef.current));
+  }, [codes, hydrated]);
+
+  // 2) 早期 return は Hook の「後」
+  if (!hydrated) {
+    return null; // or Skeleton
+  }
+
+  const clearCodes = () => {
+    localStorage.removeItem("codes");
+    setCodes(initialCodes);
+    setSelectedIndex(0);
+    // Reset robots
+    robotsRef.current = [{ x: 0, y: 0, r: 0, g: 0, b: 0 }];
+  };
+  // END of Hook declarations
 
   return (
     <div>
@@ -720,10 +732,10 @@ const ShicaPage = () => {
 
               <div className="w-3/4">
                 <ShicaCodeEditor
-                  key={codes[selectedIndex].filename}
-                  filename={codes[selectedIndex].filename}
+                  key={codes[selectedIndex]?.filename || "Agent0"}
+                  filename={codes[selectedIndex]?.filename || "Agent0"}
                   language=".shica"
-                  initialCode={codes[selectedIndex].code}
+                  initialCode={codes[selectedIndex]?.code || ""}
                   onCodeChange={(newCode) => updateItem(selectedIndex, newCode)}
                   isRounded={false}
                   width="w-full"
@@ -798,7 +810,7 @@ const ShicaPage = () => {
                 }}
               >
                 <span className="text-sm text-gray-500">
-                  {codes[selectedIndex].filename}.shica
+                  {codes[selectedIndex]?.filename || "Agent0"}.shica
                 </span>
               </button>
 
@@ -811,7 +823,7 @@ const ShicaPage = () => {
                 }}
               >
                 <span className="text-sm text-gray-500">
-                  {codes[selectedIndex].filename}.stt
+                  {codes[selectedIndex]?.filename || "Agent0"}.stt
                 </span>
               </button>
               <select
@@ -825,11 +837,16 @@ const ShicaPage = () => {
                 <option value={50}>50</option>
                 <option value={25}>25</option>
               </select>
-              <select>
-                <option value="stt">State</option>
-                <option value="send">Send</option>
-                <option value="receive">Receive</option>
-              </select>
+              <button
+                onClick={clearCodes}
+                className={`flex items-center space-x-2 px-4 py-2 rounded text-sm font-medium transition-all duration-200 hover:scale-105`}
+                style={{
+                  backgroundColor: "var(--color-background-secondary)",
+                  color: "var(--color-text-primary)",
+                }}
+              >
+                <span className="text-sm text-gray-500">Clear All Files</span>
+              </button>
             </div>
             {/* BOTTOM */}
             <div className="h-full overflow-hidden">
