@@ -8,7 +8,9 @@ export const lessons: Lesson[] = [
     content: [
       {
         type: "paragraph",
-        text: "<b>Shica</b> is a programming language for distributed physical computing systems.",
+        text: "<b>Shica</b> is a programming language for distributed physical computing systems." +
+        " It is designed to make it easy to write programs that interact with the physical world through sensors and actuators. " +
+        "<b>W-Shica</b> is a web-based IDE that allows you to learn, design, test and demonstrate Shica programs directly in your browser!",
       },
       {
         type: "heading",
@@ -23,42 +25,47 @@ export const lessons: Lesson[] = [
         ],
       },
       {
-        type: "info",
-        text: "Shica makes it easy to build complex systems that interact with the physical world!",
-      },
-      {
         type: "heading",
         text: "Hello World in Shica",
       },
       {
+        type: "paragraph",
+        text: "Starting with the basics, " +
+        "Here's a simple Hello World program written in Shica:",
+      },
+      {
         type: "code",
-        code: '// Hello World program\nstate greeting(){\n    entry(){\n        print("Hello, World!");\n    }\n}',
+        filename: "hello_world.shica",
+        code: '// Hello World program\nstate shica(){\n    entry(){\n        print("Hello, World!");\n    }\n}',
         output: "Hello, World!",
       },
       {
         type: "heading",
-        text: "What is W-Shica?",
+        text: "Get Started with W-Shica IDE",
       },
       {
         type: "paragraph",
-        text: "W-Shica is a web-based environment to write and run Shica code easily in your browser.\nYou can try out Shica without any installation!",
+        text: "Open <a href='https://dear-project.com/ide' target='_blank' rel='noopener noreferrer'><b><u>W-Shica IDE</u></b></a> " +
+        "and try running the Hello World program yourself!",
       },
+      {
+        type: "figure",
+        src: "/user-study/shica-ide.png",
+        altText: "W-Shica IDE Interface",
+      },
+      {
+        type: "list",
+        items: [
+          "Left map: you can see the rover agent here.",
+          "Middle panele: you can add and choose code files here.",
+          "Right panele: you can write and edit Shica code here.",
+          "Compile/Run button: click here to compile and run your Shica code. (Run implements all codes)",
+          "Bottom panele: you can see the output console here.",
+        ],
+      }
     ],
   },
-  {
-    id: 1,
-    title: "Introduction",
-    content: [
-      {
-        type: "paragraph",
-        text: '<a href="https://dear-project.com/ide"><b>W-Shica IDE 🔗</b></a> provides an easy-to-use interface to write, run, and share Shica code directly from your web browser. It includes features like syntax highlighting, code completion, and an integrated console for output.',
-      },
-      {
-        type: "paragraph",
-        text: "To get started with W-Shica IDE, simply navigate to the website, create a new project, and start coding in Shica!",
-      },
-    ],
-  },
+  // --- ---
   {
     id: 2,
     title: "State features",
@@ -73,12 +80,19 @@ export const lessons: Lesson[] = [
       },
       {
         type: "paragraph",
-        text: "In Shica, code is organized into states. Each state represents a specific mode of operation for your system. So your sysmtem must have at least one state to start with.",
+        text: "In Shica, code is organized into states. Each state represents a specific mode of operation for your system."+
+         " So your sysmtem must have at least one state to start with." +
+         " Initial state is starting from most top state block.",
       },
       {
         type: "code",
+        filename: "mystate.shica",
         code: '// This is a state block\nstate MyState(){\n    entry(){\n        print("Entering MyState");\n    }\n}',
         output: "Entering MyState",
+      },
+      {
+        type: "paragraph",
+        text: "The above code defines a state called <b>MyState()</b>. When the system enters this state, it will execute the code inside the <b>entry()</b> block, which prints <b>Entering MyState</b> to the console.",
       },
       {
         type: "heading",
@@ -90,8 +104,13 @@ export const lessons: Lesson[] = [
       },
       {
         type: "code",
+        filename: "state_transition.shica",
         code: '// State transition example\nstate StateA(){\n    entry(){\n        print("In State A");\n        // Transition to State B\n        state StateB;\n    }\n}\n\nstate StateB(){\n    entry(){\n        print("In State B");\n    }\n}',
         output: "In State A\nIn State B",
+      },
+      {
+        type: "paragraph",
+        text: "In this example, when the system enters <b>StateA()</b>, it prints <b>In State A</b> and then transitions to <b>StateB()</b>, which prints <b>In State B</b>.",
       },
     ],
   },
@@ -108,30 +127,79 @@ export const lessons: Lesson[] = [
         text: "Event Handlers",
       },
       {
+        type: "paragraph",
+        text: "Event handlers are special functions that are triggered when a specific event occurs. " +
+        "You can define event handlers within a state block to respond to events relevant to that state." +
+        " Each event handler provides event arguments that give you information about the event. " +
+        "The event argument is specified in the parentheses of the event handler.",
+      },
+      {
         type: "code",
+        filename: "event_handler.shica",
         code: '// Event handler example\nstate ButtonState(){\n    entry(){\n        print("Waiting for button press...");\n    }\n    clickEH(int count){\n        print("Button was pressed ", count, " times");\n    }\n}',
         output:
           "Waiting for button press...\nButton was pressed 1 times\nButton was pressed 2 times\n...",
+      },
+      {
+        type: "paragraph",
+        text: "In this example, the <b>clickEH(int count)</b> event handler is triggered whenever a button is pressed. It prints the number of times the button has been pressed.",
       },
       {
         type: "heading",
         text: "Event conditions",
       },
       {
+        type: "paragraph",
+        text: "You can also add conditions to event handlers to control when they are triggered (Left side of event argument with colon ':'). The event handler will only be executed when the condition is true.",
+      },
+      {
         type: "code",
+        filename: "event_condition.shica",
         code: '// Event condition example\nstate SensorState(){\n    entry(){\n        print("Counting time!");\n    }\n    timerEH(int sec:sec%2==0){\n        print("every 2 seconds");\n    }\n}',
         output: "Counting time!\nevery 2 seconds\nevery 2 seconds\n...",
+      },
+      {
+        type: "paragraph",
+        text: "In this example, the <b>timerEH(int sec:sec%2==0)</b> event handler is triggered every 2 seconds, printing <b>every 2 seconds</b> to the console.",
       },
       {
         type: "heading",
         text: "Multiple event handlers",
       },
       {
-        type: "code",
-        code: '// Multiple event handlers example\nstate MultiEventState(){\n    timerEH(int sec:sec%2==0){\n\t\tprint("every 2 seconds");\n    }\n    timerEH(int sec:sec%5==0){\n        print("every 5 seconds");\n    }\n}',
-        output:
-          "every 2 seconds\nevery 2 seconds\nevery 5 seconds\nevery 2 seconds\n...",
+        type: "paragraph",
+        text: "You can define multiple event handlers within a single state to respond to different events or conditions.",
       },
+      {
+        type: "code",
+        filename: "multiple_event_handlers.shica",
+        code: '// Multiple event handlers example\nstate MultiEventState(){\n\tclickEH(int count){\n\t\tprint("Button was pressed ", count, " times");\n\t}\n    timerEH(int sec:sec%2==0){\n\t\tprint("every 2 seconds");\n    }\n    timerEH(int sec:sec%5==0){\n        print("every 5 seconds");\n    }\n}',
+        output:
+          "Button was pressed 1 times\nevery 2 seconds\nevery 5 seconds\nevery 2 seconds\n...",
+      },
+      {
+        type: "paragraph",
+        text: "In this example, the state <b>MultiEventState()</b> has three event handlers: <b>clickEH</b> for button presses, and two <b>timerEH</b> handlers for different time intervals (every 2 seconds and every 5 seconds). Each handler operates independently, allowing the state to respond to multiple events simultaneously.",
+      },
+      {
+        type: "heading",
+        text: "Event Objects",
+      },
+      {
+        type: "paragraph",
+        text: "Event objects are special objects that encapsulate event handlers and their associated functions. " +
+        "They allow you to use events that need to be initializaed as objects, such as broadcast channels and timers.",  
+      },
+      {
+        type: "code",
+        filename: "event_object.shica",
+        code: '// Event object example\nvar t = time();\nstate OneSecTimer(){\n    t.timerEH(int sec:sec%1==0){\n        print("Every second");\n    }\n}',
+        output: "Every second\nEvery second\n...",
+      },{
+        type: "paragraph",
+        text: "In this example, we create a timer object <b>t</b> using the <b>time()</b> function. " +
+        "The event handler <b>t.timerEH(int sec:sec%1==0)</b> is defined to trigger every second, printing <b>Every second</b> to the console.",
+      }
     ],
   },
   {
@@ -152,9 +220,23 @@ export const lessons: Lesson[] = [
         filename: "receiver.shica",
       },
       {
+        type: "paragraph",
+        text: "In this example, the <b>Receiver</b> agent listens for messages on <b>channel1</b>. When a message is received, it prints the message and the sender's address to the console.",
+      },
+      {
+        type: "info",
+        text: "Make sure both Sender and Receiver agents are using the same channel name and password to communicate successfully. " +
+        "broadcast(channel_name, password) creates a broadcast channel event object. " +
+        "The channel_name is used to identify the channel, and the password is used for simple authentication.",
+      },
+      {
         type: "code",
         code: '// Sender agent\nvar channle = broadcast("channel1", "scicret");\nstate Sender(){\n\tclickEH(){\n\t\tchannle.send("Hello from Sender!");\n\t}\n}',
         filename: "sender.shica",
+      },
+      {
+        type: "paragraph",
+        text: "In this example, the <b>Sender</b> agent sends a message to <b>channel1</b> whenever the button is clicked.",
       },
       {
         type: "info",
@@ -168,7 +250,8 @@ export const lessons: Lesson[] = [
     content: [
       {
         type: "paragraph",
-        text: "Variables are like boxes that store information.",
+        text: "Shica is statically typed language like C language. You need to declare variable type when you create a variable. " +
+        "Shica supports three basic data types: string, integer, and float.",
       },
       {
         type: "heading",
@@ -176,6 +259,7 @@ export const lessons: Lesson[] = [
       },
       {
         type: "code",
+        filename: "variables.shica",
         code: '// Variable declaration and initialization\nstr name= "Taro"\nint age = 25\nflo height = 175.5\nprint(name)\nprint(age)',
       },
       {
@@ -192,10 +276,14 @@ export const lessons: Lesson[] = [
       },
       {
         type: "paragraph",
-        text: "Event objects hold one or more event handlers and its respective functions.",
+        text: "Event objects hold one or more event handlers and its respective functions." +
+        " You can create event objects using built-in functions like <b>broadcast()</b> and <b>timer()</b>." +
+        " Event variables are used to store event-related data, such as event arguments passed to event handlers." + 
+        " <b>\"var\"</b> keyword is used to declare event object variables.",
       },
       {
         type: "code",
+        filename: "event_object.shica",
         code: '// Event object example\nvar t = time();\nstate OneSecTimer(){\n    t.timerEH(int sec:sec%1==0){\n        print("Every second");\n    }\n}',
         output: "Every second\nEvery second\n...",
       },
@@ -206,15 +294,16 @@ export const lessons: Lesson[] = [
     title: "Conditional Statements",
     content: [
       {
-        type: "paragraph",
-        text: "Variables are like boxes that store information.",
-      },
-      {
         type: "heading",
         text: "If statement",
       },
       {
+        type: "paragraph",
+        text: "Conditional statements allow you to make decisions in your code based on certain conditions.",
+      },
+      {
         type: "code",
+        filename: "if_statement.shica",
         code: '// If statement example\nstate ClickEvenTimes(){\n    entry(){\n        print("Waiting for button clicks...");\n    }\n    clickEH(int count){\n        if(count % 2 == 0){\n            print("Even number of clicks: ", count);\n        }else{\n            print("Odd number of clicks: ", count);\n        }\n    }\n}',
         output:
           "Waiting for button clicks...\nOdd number of clicks: 1\nEven number of clicks: 2\n...",
@@ -234,283 +323,290 @@ export const lessons: Lesson[] = [
         text: "For loop",
       },
       {
+        type: "paragraph",
+        text: "The for loop is used to repeat a block of code a specific number of times. " +
+        "You can specify the initialization, condition, and increment/decrement in the loop header.",
+      },
+      {
         type: "code",
+        filename: "for_loop.shica",
         code: '// 5 times repeat\nstate Loop(){\n\tentry(){\n\t\tfor(int i=0; i<5; i++){\n\t\t\tprint("Hello");\n\t\t}\n\t}\n}',
+        output: "Hello\nHello\nHello\nHello\nHello",
       },
       {
         type: "heading",
         text: "While loop",
       },
       {
+        type: "paragraph",
+        text: "The while loop is used to repeat a block of code as long as a specified condition is true.",
+      },
+      {
         type: "code",
+        filename: "while_loop.shica",
         code: "// While loop example\nstate CountDown(){\n\tentry(){\n\t\tint count = 5;\n\t\twhile(count > 0){\n\t\t\tprint(count);\n\t\t\tcount = count - 1;\n\t\t}\n\t}\n}",
+        output: "5\n4\n3\n2\n1",
       },
     ],
   },
-  {
-    id: 8,
-    title: "Functions",
-    content: [
-      {
-        type: "paragraph",
-        text: "Functions allow you to break your code into reusable pieces.",
-      },
-      {
-        type: "heading",
-        text: "Function Definition",
-      },
-      {
-        type: "code",
-        code: '// Function definition example\nvoid greet(str name){\n    print("Hello, ", name, "!");\n}',
-      },
-      {
-        type: "code",
-        code: "// Math function example\nint add(int a, int b){\n    return a + b;\n}",
-      },
-    ],
-  },
-  {
-    id: 9,
-    title: "Common functions",
-    content: [
-      {
-        type: "paragraph",
-        text: "W-Shica provides X common functions to handle various tasks.",
-      },
-      {
-        type: "heading",
-        text: "Print function",
-      },
-      {
-        type: "paragraph",
-        text: "The print function outputs text to Shica IDE console. It can print strings, numbers, and variables.",
-      },
-      {
-        type: "code",
-        code: 'print("Hello, World!");',
-        output: "Hello, World!",
-      },
-    ],
-  },
-  {
-    id: 10,
-    title: "Event functions",
-    content: [
-      {
-        type: "paragraph",
-        text: "W-Shica provides X normal event functions, and Y special event functions that is element of event objects.",
-      },
-    ],
-  },
-];
+{
+  id: 9,
+  title: "Common functions",
+  content: [
+    {
+      type: "paragraph",
+      text: "W-Shica provides 13 common functions to support debugging, rover control (position/velocity), and visual appearance.",
+    },
 
-//    {
-//      id: 1,
-//      title: '基本構文',
-//      content: [
-//        {
-//          type: 'paragraph',
-//          text: 'Kazeの基本的な構文を学びましょう。'
-//        },
-//        {
-//          type: 'heading',
-//          text: 'コメント'
-//        },
-//        {
-//          type: 'code',
-//          code: '// これは1行コメントです\n\n/* これは\n   複数行コメント\n   です */'
-//        },
-//        {
-//          type: 'heading',
-//          text: '出力'
-//        },
-//        {
-//          type: 'code',
-//          code: '表示 "文字列を表示"\n表示 42\n改行表示 "改行付きで表示"'
-//        },
-//        {
-//          type: 'heading',
-//          text: '文の区切り'
-//        },
-//        {
-//          type: 'paragraph',
-//          text: 'Kazeでは、各文は改行で区切られます。セミコロンは不要です。'
-//        },
-//        {
-//          type: 'info',
-//          text: 'シンプルで読みやすいコードを書くことができます。'
-//        }
-//      ]
-//    },
-//    ,
-//    {
-//      id: 2,
-//      title: '変数とデータ型',
-//      content: [
-//        {
-//          type: 'paragraph',
-//          text: '変数は情報を保存するための箱のようなものです。'
-//        },
-//        {
-//          type: 'heading',
-//          text: '変数の宣言'
-//        },
-//        {
-//          type: 'code',
-//          code: '// 変数の宣言と初期化\n名前 は "太郎"\n年齢 は 25\n身長 は 175.5\n学生 は 真\n\n表示 名前\n表示 年齢'
-//        },
-//        {
-//          type: 'heading',
-//          text: 'データ型'
-//        },
-//        {
-//          type: 'list',
-//          items: [
-//            '文字列: "こんにちは"',
-//            '整数: 42',
-//            '小数: 3.14',
-//            '真偽値: 真、偽',
-//            'リスト: [1, 2, 3]'
-//          ]
-//        },
-//        {
-//          type: 'tryit',
-//          text: '🔥 練習問題',
-//          description: 'あなたの情報を変数に保存して表示してみましょう！',
-//          code: '私の名前 は "あなたの名前"\n私の趣味 は "プログラミング"\n表示 私の名前\n表示 私の趣味'
-//        }
-//      ]
-//    },
-//    {
-//      id: 3,
-//      title: '条件分岐',
-//      content: [
-//        {
-//          type: 'paragraph',
-//          text: '条件によって処理を変えることができます。'
-//        },
-//        {
-//          type: 'heading',
-//          text: 'もし文'
-//        },
-//        {
-//          type: 'code',
-//          code: '点数 は 85\n\nもし 点数 が 80 以上なら\n    表示 "合格です！"\nでなければ\n    表示 "残念、不合格です"\n終わり'
-//        },
-//        {
-//          type: 'heading',
-//          text: '複数条件'
-//        },
-//        {
-//          type: 'code',
-//          code: '天気 は "晴れ"\n\nもし 天気 が "晴れ" なら\n    表示 "散歩に行こう"\nまたは 天気 が "曇り" なら\n    表示 "公園に行こう"\nでなければ\n    表示 "家で読書しよう"\n終わり'
-//        },
-//        {
-//          type: 'info',
-//          text: '自然な日本語で条件を書けるので、理解しやすいです。'
-//        }
-//      ]
-//    },
-//    {
-//      id: 4,
-//      title: 'ループ（繰り返し）',
-//      content: [
-//        {
-//          type: 'paragraph',
-//          text: '同じ処理を繰り返すための構文を学びましょう。'
-//        },
-//        {
-//          type: 'heading',
-//          text: '回数指定ループ'
-//        },
-//        {
-//          type: 'code',
-//          code: '// 5回繰り返す\n5回繰り返す\n    表示 "こんにちは"\n終わり'
-//        },
-//        {
-//          type: 'heading',
-//          text: '範囲指定ループ'
-//        },
-//        {
-//          type: 'code',
-//          code: '// 1から10まで\ni を 1 から 10 まで繰り返す\n    表示 i\n終わり'
-//        },
-//        {
-//          type: 'heading',
-//          text: 'リストの各要素に対して'
-//        },
-//        {
-//          type: 'code',
-//          code: '果物 は ["りんご", "バナナ", "みかん"]\n\n各 果物 に対して\n    表示 果物\n終わり'
-//        },
-//        {
-//          type: 'tryit',
-//          text: '🔥 練習問題',
-//          description: '1から100までの数字の合計を計算してみましょう！'
-//        }
-//      ]
-//    },
-//    {
-//      id: 5,
-//      title: '関数',
-//      content: [
-//        {
-//          type: 'paragraph',
-//          text: 'コードを再利用可能な部品に分けることができます。'
-//        },
-//        {
-//          type: 'heading',
-//          text: '関数の定義'
-//        },
-//        {
-//          type: 'code',
-//          code: '関数 挨拶する\n    表示 "こんにちは！"\n終わり\n\n// 関数の呼び出し\n挨拶する'
-//        },
-//        {
-//          type: 'heading',
-//          text: 'パラメータ付き関数'
-//        },
-//        {
-//          type: 'code',
-//          code: '関数 挨拶する(名前)\n    表示 "こんにちは、" + 名前 + "さん"\n終わり\n\n挨拶する("太郎")\n挨拶する("花子")'
-//        },
-//        {
-//          type: 'heading',
-//          text: '戻り値のある関数'
-//        },
-//        {
-//          type: 'code',
-//          code: '関数 足す(a, b)\n    返す a + b\n終わり\n\n結果 は 足す(5, 3)\n表示 結果  // 8が表示される'
-//        }
-//      ]
-//    },
-//    {
-//      id: 6,
-//      title: '実践例：簡単なプログラム',
-//      content: [
-//        {
-//          type: 'paragraph',
-//          text: 'これまで学んだことを組み合わせて、実用的なプログラムを作ってみましょう。'
-//        },
-//        {
-//          type: 'heading',
-//          text: '例1: 数当てゲーム'
-//        },
-//        {
-//          type: 'code',
-//          code: '関数 数当てゲーム\n    正解 は 42\n    \n    3回繰り返す\n        表示 "数字を当ててください（1-100）"\n        予想 は 50  // 入力を想定\n        \n        もし 予想 が 正解 なら\n            表示 "正解です！🎉"\n            抜ける\n        または 予想 が 正解 より小さいなら\n            表示 "もっと大きいです"\n        でなければ\n            表示 "もっと小さいです"\n        終わり\n    終わり\n終わり'
-//        },
-//        {
-//          type: 'heading',
-//          text: '例2: 成績計算'
-//        },
-//        {
-//          type: 'code',
-//          code: '関数 成績判定(点数)\n    もし 点数 が 90 以上なら\n        返す "秀"\n    または 点数 が 80 以上なら\n        返す "優"\n    または 点数 が 70 以上なら\n        返す "良"\n    または 点数 が 60 以上なら\n        返す "可"\n    でなければ\n        返す "不可"\n    終わり\n終わり\n\n学生の成績 は [85, 92, 78, 65]\n\n各 点数 に対して\n    評価 は 成績判定(点数)\n    表示 点数 + "点: " + 評価\n終わり'
-//        },
-//        {
-//          type: 'info',
-//          text: 'おめでとうございます！Kazeの基本を習得しました。これからは自分でプログラムを作って、さらに学習を深めていきましょう！'
-//        }
-//      ]
-//    }
+    // Debug / Output
+    {
+      type: "heading",
+      text: "Log function",
+    },
+    {
+      type: "paragraph",
+      text: "The log function outputs values to the developer tools console (browser console). It is useful for debugging internal states without affecting the Shica IDE console.",
+    },
+    {
+      type: "code",
+      filename: "log_example.shica",
+      code: 'log("Debug message");\nlog(getX(), getY());',
+      output: "Debug message\n<current x> <current y>",
+    },
+
+    {
+      type: "heading",
+      text: "Print function",
+    },
+    {
+      type: "paragraph",
+      text: "The print function outputs text to the Shica IDE console. It can print strings, numbers, and variables (multiple arguments are allowed).",
+    },
+    {
+      type: "code",
+      filename: "print_example.shica",
+      code: 'print("Hello, World!");\nprint("x =", getX(), "y =", getY());',
+      output: "Hello, World!\nx = <current x> y = <current y>",
+    },
+
+    // Position
+    {
+      type: "heading",
+      text: "Move rover (position control)",
+    },
+    {
+      type: "paragraph",
+      text: "These functions directly set the rover position. setXY sets both axes at once; setX/setY update only one axis. getX/getY returns the current rover position.",
+    },
+    {
+      type: "code",
+      filename: "position_example.shica",
+      code:
+        "setXY(100, 80);\n" +
+        'print("pos =", getX(), getY());\n\n' +
+        "setX(120);\n" +
+        "setY(60);\n" +
+        'print("pos =", getX(), getY());',
+      output:
+        "pos = 100 80\n" +
+        "pos = 120 60",
+    },
+
+    // Velocity
+    {
+      type: "heading",
+      text: "Set rover velocity",
+    },
+    {
+      type: "paragraph",
+      text: "These functions set the rover velocity (vx, vy). setVXY sets both components, while setVX/setVY updates one component. getVX/getVY returns the current velocity values.",
+    },
+    {
+      type: "code",
+      filename: "velocity_example.shica",  
+      code:
+        "setVXY(2, 0);\n" +
+        'print("v =", getVX(), getVY());\n\n' +
+        "setVY(-3);\n" +
+        'print("v =", getVX(), getVY());',
+      output:
+        "v = 2 0\n" +
+        "v = 2 -3",
+    },
+
+    // Color
+    {
+      type: "heading",
+      text: "Set rover color",
+    },
+    {
+      type: "paragraph",
+      text: "setColor(r, g, b) changes the rover color. Each component (r, g, b) represents the intensity of red, green, and blue. Use this to visualize states or interactions.",
+    },
+    {
+      type: "code",
+      filename: "color_example.shica",
+      code:
+        "setColor(255, 0, 0);\n" +
+        'print("Color set to red");\n\n' +
+        "setColor(0, 255, 255);\n" +
+        'print("Color set to cyan");',
+      output:
+        "Color set to red\n" +
+        "Color set to cyan",
+    },
+  ],
+},
+{
+  id: 10,
+  title: "Event functions",
+  content: [
+    {
+      type: "paragraph",
+      text: "W-Shica provides 4 normal event functions (global event handlers) and 2 special event functions that are elements of event objects (e.g., broadcast channel and timer objects).",
+    },
+
+    // Normal event functions
+    {
+      type: "heading",
+      text: "Normal event functions (global event handlers)",
+    },
+    {
+      type: "paragraph",
+      text: "These event handlers are triggered by the runtime. You define the handler in your program, and the runtime calls it when the event occurs.",
+    },
+
+    {
+      type: "heading",
+      text: "timerEH(int sec)",
+    },
+    {
+      type: "paragraph",
+      text: "Triggered periodically (every 1 second). The parameter sec represents the elapsed seconds (or current tick count depending on the runtime). Use it for periodic updates such as movement or animations.",
+    },
+    {
+      type: "code",
+      filename: "timer_example.shica",
+      code:
+        "timerEH(int sec) {\n" +
+        '  print("tick =", sec);\n' +
+        "}",
+      output: "tick = 1\ntick = 2\n...",
+    },
+
+    {
+      type: "heading",
+      text: "clickEH(int count)",
+    },
+    {
+      type: "paragraph",
+      text: "Triggered when the user clicks on the screen (background). The parameter count is the number of clicks detected so far.",
+    },
+    {
+      type: "code",
+      filename: "click_example.shica",
+      code:
+        "clickEH(int count) {\n" +
+        '  print("screen clicked:", count);\n' +
+        "}",
+      output: "screen clicked: 1\nscreen clicked: 2\n...",
+    },
+
+    {
+      type: "heading",
+      text: "touchEH(int count)",
+    },
+    {
+      type: "paragraph",
+      text: "Triggered when the user clicks/touches the rover itself. The parameter count is the number of rover touches detected so far.",
+    },
+    {
+      type: "code",
+      filename: "touch_example.shica",
+      code:
+        "touchEH(int count) {\n" +
+        "  setColor(255, 255, 255);\n" +
+        '  print("rover touched:", count);\n' +
+        "}",
+      output: "rover touched: 1\nrover touched: 2\n...",
+    },
+
+    {
+      type: "heading",
+      text: "collisionEH(int x, int y)",
+    },
+    {
+      type: "paragraph",
+      text: "Triggered when the rover collides with walls or other rovers. Direction is represented by x and y: x==1 (left), x==-1 (right), y==1 (up), y==-1 (down). You can use this to bounce back or change direction.",
+    },
+    {
+      type: "code",
+      filename: "collision_example.shica",
+      code:
+        "collisionEH(int x, int y) {\n" +
+        '  print("collision dir:", x, y);\n' +
+        "  // Example: simple bounce\n" +
+        "  if (x != 0) setVX(-getVX());\n" +
+        "  if (y != 0) setVY(-getVY());\n" +
+        "}",
+      output: "collision dir: 1 0\ncollision dir: 0 -1\n...",
+    },
+
+    // Event object functions
+    {
+      type: "heading",
+      text: "Special event functions (event objects)",
+    },
+    {
+      type: "paragraph",
+      text: "Some events are provided as members of objects. You first create an object (e.g., broadcast channel or timer), then define its event handler (receivedEH / secEH).",
+    },
+
+    {
+      type: "heading",
+      text: "Broadcast channel: receivedEH(address, msg)",
+    },
+    {
+      type: "paragraph",
+      text: "Create a channel with broadcast(channel_name, password). You can send messages using channel.send(str). When a message is received, channel.receivedEH(address, msg) is triggered.",
+    },
+    {
+      type: "code",
+      filename: "broadcast_example.shica",
+      code:
+        'var channel = broadcast("room1", "pass");\n\n' +
+        'channel.receivedEH(str addr,str msg) {\n' +
+        '  print("received from", addr, ":", msg);\n' +
+        "}\n\n" +
+        'clickEH(int count) {\n' +
+        '  channel.send("hello");\n' +
+        "}",
+      output:
+        "received from <addr> : hello 1\nreceived from <addr> : hello 2\n...",
+    },
+
+    {
+      type: "heading",
+      text: "Timer object: secEH(s)",
+    },
+    {
+      type: "paragraph",
+      text: "Create a timer object with timer(). You can reset the timer counter using t.reset(0). The timer triggers t.secEH(s), where s is the current seconds count since reset.",
+    },
+    {
+      type: "code",
+      filename: "timer_example.shica",  
+      code:
+        "var t = timer();\n" +
+        "t.reset(0);\n\n" +
+        "t.secEH(int s) {\n" +
+        '  print("timer s =", s);\n' +
+        "  // Example: move rover slowly to the right\n" +
+        "  setX(getX() + 1);\n" +
+        "}",
+      output: "timer s = 1\ntimer s = 2\n...",
+    },
+  ],
+},
+
+];
