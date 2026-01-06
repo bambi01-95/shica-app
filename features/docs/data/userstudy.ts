@@ -11,8 +11,7 @@ export const userstudy: Lesson[] = [
       },
       {
         type: "paragraph",
-        text:
-          "This page explains what the W-Shica User Study is about and what kinds of tasks you will work on.",
+        text: "This page explains what the W-Shica User Study is about and what kinds of tasks you will work on.",
       },
       {
         type: "paragraph",
@@ -28,8 +27,7 @@ export const userstudy: Lesson[] = [
       },
       {
         type: "paragraph",
-        text:
-          "The goal of this study is to investigate how the choice of programming language affects:",
+        text: "The goal of this study is to investigate how the choice of programming language affects:",
       },
       {
         type: "list",
@@ -68,7 +66,7 @@ export const userstudy: Lesson[] = [
           "You can ask the facilitator for help if you have any questions about the tasks or the environment.",
           "Please focus on describing and understanding system behavior, rather than writing complex algorithms.",
         ],
-      }
+      },
     ],
   },
 
@@ -78,8 +76,7 @@ export const userstudy: Lesson[] = [
     content: [
       {
         type: "paragraph",
-        text:
-          "In this task, you will work with an agent whose response changes depending on the timing of a click.",
+        text: "In this task, you will work with an agent whose response changes depending on the timing of a click.",
       },
       {
         type: "heading",
@@ -98,16 +95,11 @@ export const userstudy: Lesson[] = [
       },
       {
         type: "paragraph",
-        text:
-          "The greeting message depends on the current time. The time state changes every 5 seconds.",
+        text: "The greeting message depends on the current time. The time state changes every 5 seconds.",
       },
       {
         type: "list",
-        items: [
-          "Good morning",
-          "Good afternoon",
-          "Good evening",
-        ],
+        items: ["Good morning", "Good afternoon", "Good evening"],
       },
       {
         type: "figure",
@@ -116,13 +108,11 @@ export const userstudy: Lesson[] = [
       },
       {
         type: "paragraph",
-        text:
-          "As a result, clicking the agent at different times will produce different greetings.",
+        text: "As a result, clicking the agent at different times will produce different greetings.",
       },
       {
         type: "info",
-        text:
-          "This task focuses on handling time-based state changes and varying responses to the same event.",
+        text: "This task focuses on handling time-based state changes and varying responses to the same event.",
       },
     ],
   },
@@ -133,8 +123,7 @@ export const userstudy: Lesson[] = [
     content: [
       {
         type: "paragraph",
-        text:
-          "In this task, you will work with an agent that moves continuously on the screen.",
+        text: "In this task, you will work with an agent that moves continuously on the screen.",
       },
       {
         type: "heading",
@@ -166,8 +155,7 @@ export const userstudy: Lesson[] = [
       },
       {
         type: "info",
-        text:
-          "This task examines how continuous behavior and temporary state changes can be expressed.",
+        text: "This task examines how continuous behavior and temporary state changes can be expressed.",
       },
     ],
   },
@@ -178,8 +166,7 @@ export const userstudy: Lesson[] = [
     content: [
       {
         type: "paragraph",
-        text:
-          "In this task, you will work with multiple agents that interact with each other.",
+        text: "In this task, you will work with multiple agents that interact with each other.",
       },
       {
         type: "heading",
@@ -211,13 +198,11 @@ export const userstudy: Lesson[] = [
       },
       {
         type: "paragraph",
-        text:
-          "This behavior is similar to radio buttons used in web forms.",
+        text: "This behavior is similar to radio buttons used in web forms.",
       },
       {
         type: "info",
-        text:
-          "This task focuses on managing shared state and coordination between multiple agents.",
+        text: "This task focuses on managing shared state and coordination between multiple agents.",
       },
     ],
   },
@@ -228,8 +213,7 @@ export const userstudy: Lesson[] = [
     content: [
       {
         type: "paragraph",
-        text:
-          "These tasks are not designed to test your ability to write complex algorithms.",
+        text: "These tasks are not designed to test your ability to write complex algorithms.",
       },
       {
         type: "paragraph",
@@ -239,8 +223,7 @@ export const userstudy: Lesson[] = [
       },
       {
         type: "paragraph",
-        text:
-          "Through this study, you will experience the differences between W-Shica and JavaScript.",
+        text: "Through this study, you will experience the differences between W-Shica and JavaScript.",
       },
     ],
   },
@@ -251,8 +234,8 @@ export const userstudy: Lesson[] = [
       {
         type: "paragraph",
         text:
-          "The W-Shica implementation environment is the <a href=\"https://dear-project.com/ide\"><u>Shica IDE</u></a> available on the web page." +
-          "For instructions on how to use it and for details about W-Shica, please refer to the <a href=\"https://dear-project.com/docs\"><u>Shica Docs</u></a>.",
+          'The W-Shica implementation environment is the <a href="https://dear-project.com/ide"><u>Shica IDE</u></a> available on the web page.' +
+          'For instructions on how to use it and for details about W-Shica, please refer to the <a href="https://dear-project.com/docs"><u>Shica Docs</u></a>.',
       },
       {
         type: "paragraph",
@@ -265,27 +248,27 @@ export const userstudy: Lesson[] = [
       },
       {
         type: "paragraph",
-        text:
-        "Shica IDE looks like the image below. Please use this environment to implement the tasks.",
+        text: "Shica IDE looks like the image below. Please use this environment to implement the tasks.",
       },
       {
         type: "figure",
         src: "/user-study/shica-ide.png",
         altText: "Shica IDE Interface",
-      }
-    ]
+      },
+    ],
   },
-  {    id: 6,
+  {
+    id: 6,
     title: "JavaScript Environment",
     content: [
       {
         type: "paragraph",
         text:
           "You can use any JavaScript environment you like for this study. " +
-          "If you don't have a some preferred environment, we recommend using <a href=\"https://jsfiddle.net/\"><u>JSFiddle</u></a>, " +
+          'If you don\'t have a some preferred environment, we recommend using <a href="https://jsfiddle.net/"><u>JSFiddle</u></a>, ' +
           "which is a web-based JavaScript playground." +
-          "For instructions on how to use it and for details about JavaScript, please refer to the <a href=\"https://developer.mozilla.org/en-US/docs/Web/JavaScript\"><u>MDN Web Docs</u></a>, " +
-          "<a href=\"https://www.w3schools.com/js/js_intro.asp\"><u>W3Schools</u></a>.",
+          'For instructions on how to use it and for details about JavaScript, please refer to the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"><u>MDN Web Docs</u></a>, ' +
+          '<a href="https://www.w3schools.com/js/js_intro.asp"><u>W3Schools</u></a>.',
       },
       {
         type: "heading",
@@ -293,20 +276,20 @@ export const userstudy: Lesson[] = [
       },
       {
         type: "paragraph",
-        text: "If you'd like to use same Rover and map UI as in the W-Shica enviroment, " +
+        text:
+          "If you'd like to use same Rover and map UI as in the W-Shica enviroment, " +
           "you can use the following HTML/CSS snippet as a starting point.",
       },
       {
         type: "code",
         filename: "index.html",
-        code:"<div id=\"map\">\n\t<div class=\"robot-vacuum\"></div>\n</div>"
+        code: '<div id="map">\n\t<div class="robot-vacuum"></div>\n</div>',
       },
       {
         type: "code",
         filename: "styles.css",
-        code:"#map {\n\tposition: relative;\n\twidth: 500px;\n\theight: 500px;\n\tborder: 1px solid #ccc;\n\tbackground-color: #f9f9f9;\n\tbackground-image: linear-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.08) 1px, transparent 1px);\n\tbackground-size: 20px 20px;\n\tcursor: crosshair;\n\}\n\n\.robot-vacuum {\n\tposition: absolute;\n\tleft: 0;\n\ttop: 0;\n\twidth: 50px;\n\theight: 50px;\n\ttransition: all 0.05s linear;\n\twill-change: transform;\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n\tbackground: linear-gradient(135deg, #2c3e50, #34495e);\n\tborder-radius: 50%;\n\tborder: 3px solid #000;\n\tbox-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);\n\}\n\n\.robot-vacuum::before {\n\tcontent: \"\";\n\tposition: absolute;\n\twidth: 20px;\n\theight: 20px;\n\tbackground: #000;\n\tborder-radius: 50%;\n\ttop: 50%;\n\tleft: 50%;\n\ttransform: translate(-50%, -50%);\n\tbox-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);\n\}\n\n\.robot-vacuum::after {\n\tcontent: \"\";\n\tposition: absolute;\n\twidth: 8px;\n\theight: 8px;\n\tbackground: #e74c3c;\n\tborder-radius: 50%;\n\ttop: 25%;\n\tleft: 50%;\n\ttransform: translate(-50%, -50%);\n\tanimation: blink 2s infinite;\n\}\n\n\@keyframes blink {\n\t0%, 100% { opacity: 1; }\n\t50% { opacity: 0.2; }\n\}\n"
+        code: '#map {\n\tposition: relative;\n\twidth: 500px;\n\theight: 500px;\n\tborder: 1px solid #ccc;\n\tbackground-color: #f9f9f9;\n\tbackground-image: linear-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.08) 1px, transparent 1px);\n\tbackground-size: 20px 20px;\n\tcursor: crosshair;\n}\n\n.robot-vacuum {\n\tposition: absolute;\n\tleft: 0;\n\ttop: 0;\n\twidth: 50px;\n\theight: 50px;\n\ttransition: all 0.05s linear;\n\twill-change: transform;\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n\tbackground: linear-gradient(135deg, #2c3e50, #34495e);\n\tborder-radius: 50%;\n\tborder: 3px solid #000;\n\tbox-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);\n}\n\n.robot-vacuum::before {\n\tcontent: "";\n\tposition: absolute;\n\twidth: 20px;\n\theight: 20px;\n\tbackground: #000;\n\tborder-radius: 50%;\n\ttop: 50%;\n\tleft: 50%;\n\ttransform: translate(-50%, -50%);\n\tbox-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);\n}\n\n.robot-vacuum::after {\n\tcontent: "";\n\tposition: absolute;\n\twidth: 8px;\n\theight: 8px;\n\tbackground: #e74c3c;\n\tborder-radius: 50%;\n\ttop: 25%;\n\tleft: 50%;\n\ttransform: translate(-50%, -50%);\n\tanimation: blink 2s infinite;\n}\n\n@keyframes blink {\n\t0%, 100% { opacity: 1; }\n\t50% { opacity: 0.2; }\n}\n',
       },
-    ]
-  }
+    ],
+  },
 ];
-

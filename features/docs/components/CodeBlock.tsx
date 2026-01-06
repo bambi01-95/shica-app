@@ -63,7 +63,9 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
       {output && (
         <div className="px-4 py-2 bg-gray-200 text-gray-500 text-sm border-t border-gray-200">
           <strong className="block mb-1">Output:</strong>
-          <pre className="whitespace-pre-wrap" translate="no">{output}</pre>
+          <pre className="whitespace-pre-wrap" translate="no">
+            {output}
+          </pre>
         </div>
       )}
     </div>
@@ -71,4 +73,3 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
 };
 
 export default CodeBlock;
-

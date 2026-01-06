@@ -18,8 +18,7 @@ export const home: Lesson[] = [
       },
       {
         type: "info",
-        text:
-          "Real-world systems are inherently stateful, reactive, and distributed. Shica makes these characteristics first-class citizens of the language.",
+        text: "Real-world systems are inherently stateful, reactive, and distributed. Shica makes these characteristics first-class citizens of the language.",
       },
       {
         type: "heading",
@@ -33,8 +32,7 @@ export const home: Lesson[] = [
       },
       {
         type: "paragraph",
-        text:
-          "Shica integrates these concepts directly into the language, allowing programmers to focus on how a system behaves rather than how control flow is manually implemented.",
+        text: "Shica integrates these concepts directly into the language, allowing programmers to focus on how a system behaves rather than how control flow is manually implemented.",
       },
 
       {
@@ -47,13 +45,11 @@ export const home: Lesson[] = [
       },
       {
         type: "paragraph",
-        text:
-          "A Shica program is composed of explicit states. Each state defines which events are valid and how the system should react while in that state.",
+        text: "A Shica program is composed of explicit states. Each state defines which events are valid and how the system should react while in that state.",
       },
       {
         type: "paragraph",
-        text:
-          "This structure makes it easy to understand what can happen in each state and how transitions occur.",
+        text: "This structure makes it easy to understand what can happen in each state and how transitions occur.",
       },
 
       {
@@ -83,9 +79,10 @@ export const home: Lesson[] = [
         text: "Execution Environments",
       },
       {
-        type:"figure",
-        src:"/home/shica-wr.png",
-        altText:"Shica execution environments: W-Shica in the browser and R-Shica on a Raspberry Pi."
+        type: "figure",
+        src: "/home/shica-wr.png",
+        altText:
+          "Shica execution environments: W-Shica in the browser and R-Shica on a Raspberry Pi.",
       },
       {
         type: "heading",
@@ -93,8 +90,7 @@ export const home: Lesson[] = [
       },
       {
         type: "paragraph",
-        text:
-          "W-Shica is a browser-based execution environment that allows developers to test, debug, and simulate Shica programs without real hardware.",
+        text: "W-Shica is a browser-based execution environment that allows developers to test, debug, and simulate Shica programs without real hardware.",
       },
       {
         type: "list",
@@ -111,8 +107,7 @@ export const home: Lesson[] = [
       },
       {
         type: "paragraph",
-        text:
-          "R-Shica runs on real devices such as Raspberry Pi and interacts directly with sensors and actuators.",
+        text: "R-Shica runs on real devices such as Raspberry Pi and interacts directly with sensors and actuators.",
       },
       {
         type: "list",
@@ -150,9 +145,8 @@ export const home: Lesson[] = [
       },
       {
         type: "paragraph",
-        text:
-        "Kyoto University of Advanced Science - Programming Systems Laboratory."
-      }
+        text: "Kyoto University of Advanced Science - Programming Systems Laboratory.",
+      },
     ],
   },
 ];
