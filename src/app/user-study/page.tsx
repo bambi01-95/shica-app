@@ -14,12 +14,12 @@ export function UserStudyPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const navigate = (direction: number) => {
-    const newLesson = currentLesson + direction;
-    if (newLesson >= 0 && newLesson < userstudy.length) {
-      handleLessonChange(newLesson);
-    }
-  };
+  // const navigate = (direction: number) => {
+  //   const newLesson = currentLesson + direction;
+  //   if (newLesson >= 0 && newLesson < userstudy.length) {
+  //     handleLessonChange(newLesson);
+  //   }
+  // };
 
   return (
     <div className="max-w-7xl mx-auto">
