@@ -13,7 +13,6 @@ import SizeWarningPage from "../../../features/ide/components/SizeWaring";
 import ThemeToggleButton from "../../../components/ui/ThemeToggleButton";
 
 import { Roboto } from "next/font/google";
-import { sampleCodes } from "./sample";
 const roboto = Roboto({
   subsets: ["latin", "latin-ext"],
   weight: ["400", "600", "500", "700"],
@@ -65,14 +64,23 @@ type CodeItem = {
   compiled: boolean;
 };
 
+const sampleCode: string = `// Simple Click Example
+stt s1(){
+  entryEH(){
+    print("Hello Shica");
+  }
+  clickEH(int x, int y){
+    setXY(x, y);
+  } 
+}
+`;
+
 const ShicaPage = () => {
   const initialCodes = useMemo<CodeItem[]>(
     () => [
       {
         filename: "Agent0",
-        code:
-          sampleCodes[0] ||
-          "stt s1(){\n    clickEH(x,y){\n        setXY(x,y);\n    }\n}",
+        code: sampleCode,
         compiled: false,
       },
     ],
@@ -167,7 +175,7 @@ const ShicaPage = () => {
     x: 0,
     y: 0,
   });
-  const [fps, setFps] = useState(200);
+  const [fps, setFps] = useState(100);
 
   const [rgb, setRgb] = useState({ r: 0, g: 0, b: 0 });
 
@@ -190,7 +198,7 @@ const ShicaPage = () => {
       ...prev,
       {
         filename: `Agent${codes.length}`,
-        code: sampleCodes[1],
+        code: sampleCode,
         compiled: false,
       },
     ]);
@@ -471,7 +479,7 @@ const ShicaPage = () => {
             "i32"
           );
         }
-        setForceUpdate((prev) => prev + 1); // 位置更新を画面に反映
+        setForceUpdate((prev) => prev + 1); 
         setTime(time + fps);
         Module.setValue(Module.clickPtr + 8, 0, "i32"); // inactive
       }, fps);
@@ -557,7 +565,7 @@ const ShicaPage = () => {
         )
       );
     };
-    reader.readAsText(file); // テキストとして読み込む
+    reader.readAsText(file); 
   };
   // Download code.stt button
   const downloadSTTFile = async () => {
@@ -602,7 +610,7 @@ const ShicaPage = () => {
     localStorage.setItem("robots", JSON.stringify(robotsRef.current));
   }, [codes, hydrated]);
 
-  // 2) 早期 return は Hook の「後」
+
   if (!hydrated) {
     return null; // or Skeleton
   }
@@ -781,7 +789,7 @@ const ShicaPage = () => {
               >
                 {isCompiling ? "Compiling..." : "Compile"}
               </button>
-              <label
+              {/* <label
                 htmlFor="fileInput"
                 className={`flex items-center space-x-2 px-4 py-2 rounded text-sm font-medium transition-all duration-200 hover:scale-105`}
                 style={{
@@ -800,7 +808,7 @@ const ShicaPage = () => {
                 disabled={isRunning}
                 accept=".c,.h,.txt"
                 onChange={handleFileChange}
-              />
+              /> */}
               <button
                 onClick={() => downloadFile(".shica")}
                 className={`flex items-center space-x-2 px-4 py-2 rounded text-sm font-medium transition-all duration-200 hover:scale-105`}
@@ -810,11 +818,11 @@ const ShicaPage = () => {
                 }}
               >
                 <span className="text-sm text-gray-500">
-                  {codes[selectedIndex]?.filename || "Agent0"}.shica
+                  Donwload {codes[selectedIndex]?.filename || "Agent0"}.shica
                 </span>
               </button>
 
-              <button
+              {/* <button
                 onClick={() => downloadSTTFile()}
                 className={`flex items-center space-x-2 px-4 py-2 rounded text-sm font-medium transition-all duration-200 hover:scale-105`}
                 style={{
@@ -825,10 +833,11 @@ const ShicaPage = () => {
                 <span className="text-sm text-gray-500">
                   {codes[selectedIndex]?.filename || "Agent0"}.stt
                 </span>
-              </button>
+              </button> */}
               <select
                 disabled={isRunning}
                 onChange={(e) => setFps(Number(e.target.value))}
+                value={fps}
                 className="px-2 py-1 rounded bg-gray-100 text-gray-700"
               >
                 <option value={500}>500</option>
