@@ -1,0 +1,13 @@
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      # 変更検知が不安定ならON（後述）
+      # - WATCHPACK_POLLING=true
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    command: npm run dev

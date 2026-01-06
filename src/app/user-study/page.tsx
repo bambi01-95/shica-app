@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Header from "../../../features/docs/components/Header";
 import Sidebar from "../../../features/docs/components/Sidebar";
 import LessonContent from "../../../features/docs/components/LessonContent";
 import NavigationButtons from "../../../features/docs/components/NavigationButtons";
@@ -23,33 +22,26 @@ export function UserStudyPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header
-        title="W-Shica User Study"
-        subtitle="Guided tasks to explore W-Shica features."
-      />
+    <div className="max-w-7xl mx-auto">
+      <div className="px-5 mb-20 lg:px-0">
+        <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr]">
+          <Sidebar
+            lessons={userstudy}
+            currentLesson={currentLesson}
+            onLessonSelect={handleLessonChange}
+          />
 
-      <div className="max-w-7xl mx-auto">
-        <div className="px-5 mb-20 lg:px-0">
-          <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr]">
-            <Sidebar
-              lessons={userstudy}
-              currentLesson={currentLesson}
-              onLessonSelect={handleLessonChange}
-            />
+          <main className="bg-white p-6 lg:p-10">
+            <article>
+              <LessonContent lesson={userstudy[currentLesson]} />
 
-            <main className="bg-white p-6 lg:p-10">
-              <article>
-                <LessonContent lesson={userstudy[currentLesson]} />
-
-                <NavigationButtons
-                  currentLesson={currentLesson}
-                  totalLessons={userstudy.length}
-                  onNavigate={navigate}
-                />
-              </article>
-            </main>
-          </div>
+              <NavigationButtons
+                currentLesson={currentLesson}
+                totalLessons={userstudy.length}
+                onNavigate={navigate}
+              />
+            </article>
+          </main>
         </div>
       </div>
     </div>
