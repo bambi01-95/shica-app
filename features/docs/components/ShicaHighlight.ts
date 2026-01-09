@@ -1,5 +1,6 @@
 export function highlightShicaCode(text: string): string {
   const keywords = [
+    "state",
     "stt",
     "var",
     "func",
