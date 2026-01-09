@@ -2697,9 +2697,9 @@ function ___syscall_openat(dirfd, path, flags, varargs) {
     return -e.errno;
   }
 }
-function __lib_web_rtc_broadcast_send_(index, msgPtr, num) {
+function __lib_web_rtc_broadcast_send_(index, msgPtr) {
   const msg = UTF8ToString(msgPtr);
-  _sendWebRtcBroadcast(index, msg, num);
+  _sendWebRtcBroadcast(index, msg);
   return 0;
 }
 function __web_rtc_broadcast_eo_(index, channelPtr, passwordPtr, ptr) {

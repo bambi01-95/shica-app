@@ -38,7 +38,7 @@ export const lessons: Lesson[] = [
       {
         type: "code",
         filename: "hello_world.shica",
-        code: '// Hello World program\nstate shica(){\n    entry(){\n        print("Hello, World!");\n    }\n}',
+        code: '// Hello World program\nstate shica(){\n    entryEH(){\n        print("Hello, World!");\n    }\n}',
         output: "Hello, World!",
       },
       {
@@ -91,12 +91,12 @@ export const lessons: Lesson[] = [
       {
         type: "code",
         filename: "mystate.shica",
-        code: '// This is a state block\nstate MyState(){\n    entry(){\n        print("Entering MyState");\n    }\n}',
+        code: '// This is a state block\nstate MyState(){\n    entryEH(){\n        print("Entering MyState");\n    }\n}',
         output: "Entering MyState",
       },
       {
         type: "paragraph",
-        text: "The above code defines a state called <b>MyState()</b>. When the system enters this state, it will execute the code inside the <b>entry()</b> block, which prints <b>Entering MyState</b> to the console.",
+        text: "The above code defines a state called <b>MyState()</b>. When the system enters this state, it will execute the code inside the <b>entryEH()</b> block, which prints <b>Entering MyState</b> to the console.",
       },
       {
         type: "heading",
@@ -109,7 +109,7 @@ export const lessons: Lesson[] = [
       {
         type: "code",
         filename: "state_transition.shica",
-        code: '// State transition example\nstate StateA(){\n    entry(){\n        print("In State A");\n        // Transition to State B\n        state StateB;\n    }\n}\n\nstate StateB(){\n    entry(){\n        print("In State B");\n    }\n}',
+        code: '// State transition example\nstate StateA(){\n    entryEH(){\n        print("In State A");\n        // Transition to State B\n        state StateB;\n    }\n}\n\nstate StateB(){\n    entryEH(){\n        print("In State B");\n    }\n}',
         output: "In State A\nIn State B",
       },
       {
@@ -141,13 +141,13 @@ export const lessons: Lesson[] = [
       {
         type: "code",
         filename: "event_handler.shica",
-        code: '// Event handler example\nstate ButtonState(){\n    entry(){\n        print("Waiting for button press...");\n    }\n    clickEH(int count){\n        print("Button was pressed ", count, " times");\n    }\n}',
+        code: '// Event handler example\nstate ButtonState(){\n    entryEH(){\n        print("Waiting for button press...");\n    }\n    clickEH(int x, int y){\n        print("Rover was pressed ", x, ", ", y);\n    }\n}',
         output:
           "Waiting for button press...\nButton was pressed 1 times\nButton was pressed 2 times\n...",
       },
       {
         type: "paragraph",
-        text: "In this example, the <b>clickEH(int count)</b> event handler is triggered whenever a button is pressed. It prints the number of times the button has been pressed.",
+        text: "In this example, the <b>clickEH(int x, int y)</b> event handler is triggered whenever a button is pressed. It prints the coordinates where the button was pressed.",
       },
       {
         type: "heading",
@@ -160,7 +160,7 @@ export const lessons: Lesson[] = [
       {
         type: "code",
         filename: "event_condition.shica",
-        code: '// Event condition example\nstate SensorState(){\n    entry(){\n        print("Counting time!");\n    }\n    timerEH(int sec:sec%2==0){\n        print("every 2 seconds");\n    }\n}',
+        code: '// Event condition example\nstate SensorState(){\n    entryEH(){\n        print("Counting time!");\n    }\n    timerEH(int sec:sec%2==0){\n        print("every 2 seconds");\n    }\n}',
         output: "Counting time!\nevery 2 seconds\nevery 2 seconds\n...",
       },
       {
@@ -178,9 +178,9 @@ export const lessons: Lesson[] = [
       {
         type: "code",
         filename: "multiple_event_handlers.shica",
-        code: '// Multiple event handlers example\nstate MultiEventState(){\n\tclickEH(int count){\n\t\tprint("Button was pressed ", count, " times");\n\t}\n    timerEH(int sec:sec%2==0){\n\t\tprint("every 2 seconds");\n    }\n    timerEH(int sec:sec%5==0){\n        print("every 5 seconds");\n    }\n}',
+        code: '// Multiple event handlers example\nstate MultiEventState(){\n\tclickEH(int x, int y){\n\t\tprint("Button was pressed ", x, ", ", y);\n\t}\n    timerEH(int sec:sec%2==0){\n\t\tprint("every 2 seconds");\n    }\n    timerEH(int sec:sec%5==0){\n        print("every 5 seconds");\n    }\n}',
         output:
-          "Button was pressed 1 times\nevery 2 seconds\nevery 5 seconds\nevery 2 seconds\n...",
+          "Button was pressed 0,0\nevery 2 seconds\nevery 5 seconds\nevery 2 seconds\n...",
       },
       {
         type: "paragraph",
@@ -199,7 +199,7 @@ export const lessons: Lesson[] = [
       {
         type: "code",
         filename: "event_object.shica",
-        code: '// Event object example\nvar t = time();\nstate OneSecTimer(){\n    t.timerEH(int sec:sec%1==0){\n        print("Every second");\n    }\n}',
+        code: '// Event object example\nvar t = timerEO();\nstate OneSecTimer(){\n    t.secEH(int sec:sec%1==0){\n        print("Every second");\n    }\n}',
         output: "Every second\nEvery second\n...",
       },
       {
@@ -224,7 +224,7 @@ export const lessons: Lesson[] = [
       },
       {
         type: "code",
-        code: '// Receiver agent\nvar channle = broadcast("channel1", "scicret");\nstate Receiver(){\n\tchannle.receive(str addr, str msg){\n\t\tprint("Received message: ", msg, " from ", addr);\n\t}\n}',
+        code: '// Receiver agent\nvar channle = broadcastEO("channel1", "scicret");\nstate Receiver(){\n\tchannle.receivedEH(str addr, str msg){\n\t\tprint("Received message: ", msg, " from ", addr);\n\t}\n}',
         filename: "receiver.shica",
       },
       {
@@ -235,12 +235,12 @@ export const lessons: Lesson[] = [
         type: "info",
         text:
           "Make sure both Sender and Receiver agents are using the same channel name and password to communicate successfully. " +
-          "broadcast(channel_name, password) creates a broadcast channel event object. " +
+          "broadcastEO(channel_name, password) creates a broadcast channel event object. " +
           "The channel_name is used to identify the channel, and the password is used for simple authentication.",
       },
       {
         type: "code",
-        code: '// Sender agent\nvar channle = broadcast("channel1", "scicret");\nstate Sender(){\n\tclickEH(){\n\t\tchannle.send("Hello from Sender!");\n\t}\n}',
+        code: '// Sender agent\nvar channle = broadcastEO("channel1", "scicret");\nstate Sender(){\n\tclickEH(int x, int y){\n\t\tchannle.send("Hello from Sender!");\n\t}\n}',
         filename: "sender.shica",
       },
       {
@@ -295,7 +295,7 @@ export const lessons: Lesson[] = [
       {
         type: "code",
         filename: "event_object.shica",
-        code: '// Event object example\nvar t = time();\nstate OneSecTimer(){\n    t.timerEH(int sec:sec%1==0){\n        print("Every second");\n    }\n}',
+        code: '// Event object example\nvar t = timerEO();\nstate OneSecTimer(){\n    t.secEH(int sec:sec%1==0){\n        print("Every second");\n    }\n}',
         output: "Every second\nEvery second\n...",
       },
     ],
@@ -315,9 +315,9 @@ export const lessons: Lesson[] = [
       {
         type: "code",
         filename: "if_statement.shica",
-        code: '// If statement example\nstate ClickEvenTimes(){\n    entry(){\n        print("Waiting for button clicks...");\n    }\n    clickEH(int count){\n        if(count % 2 == 0){\n            print("Even number of clicks: ", count);\n        }else{\n            print("Odd number of clicks: ", count);\n        }\n    }\n}',
+        code: '// If statement example\nstate ClickEvenTimes(){\n    entryEH(){\n        print("Waiting for button clicks...");\n    }\n    clickEH(int x,int y){\n        if(x % 2 == 0){\n            print(x, " is even");\n        }else{\n            print(x, " is odd");\n        }\n    }\n}',
         output:
-          "Waiting for button clicks...\nOdd number of clicks: 1\nEven number of clicks: 2\n...",
+          "Waiting for button clicks...\n0 is even\n1 is odd\n2 is even\n...",
       },
     ],
   },
@@ -342,7 +342,7 @@ export const lessons: Lesson[] = [
       {
         type: "code",
         filename: "for_loop.shica",
-        code: '// 5 times repeat\nstate Loop(){\n\tentry(){\n\t\tfor(int i=0; i<5; i++){\n\t\t\tprint("Hello");\n\t\t}\n\t}\n}',
+        code: '// 5 times repeat\nstate Loop(){\n\tentryEH(){\n\t\tfor(int i=0; i<5; i++){\n\t\t\tprint("Hello");\n\t\t}\n\t}\n}',
         output: "Hello\nHello\nHello\nHello\nHello",
       },
       {
@@ -356,7 +356,7 @@ export const lessons: Lesson[] = [
       {
         type: "code",
         filename: "while_loop.shica",
-        code: "// While loop example\nstate CountDown(){\n\tentry(){\n\t\tint count = 5;\n\t\twhile(count > 0){\n\t\t\tprint(count);\n\t\t\tcount = count - 1;\n\t\t}\n\t}\n}",
+        code: "// While loop example\nstate CountDown(){\n\tentryEH(){\n\t\tint count = 5;\n\t\twhile(count > 0){\n\t\t\tprint(count);\n\t\t\tcount = count - 1;\n\t\t}\n\t}\n}",
         output: "5\n4\n3\n2\n1",
       },
     ],
@@ -499,20 +499,20 @@ export const lessons: Lesson[] = [
 
       {
         type: "heading",
-        text: "clickEH(int count)",
+        text: "clickEH(int x, int y)",
       },
       {
         type: "paragraph",
-        text: "Triggered when the user clicks on the screen (background). The parameter count is the number of clicks detected so far.",
+        text: "Triggered when the user clicks on the screen (map). The parameters x and y represent the coordinates of the click.",
       },
       {
         type: "code",
         filename: "click_example.shica",
         code:
-          "clickEH(int count) {\n" +
-          '  print("screen clicked:", count);\n' +
+          "clickEH(int x, int y) {\n" +
+          '  print("screen clicked at:", x, y);\n' +
           "}",
-        output: "screen clicked: 1\nscreen clicked: 2\n...",
+        output: "screen clicked at: 10 20\nscreen clicked at: 15 25\n...",
       },
 
       {
@@ -571,13 +571,13 @@ export const lessons: Lesson[] = [
       },
       {
         type: "paragraph",
-        text: "Create a channel with broadcast(channel_name, password). You can send messages using channel.send(str). When a message is received, channel.receivedEH(address, msg) is triggered.",
+        text: "Create a channel with broadcastEO(channel_name, password). You can send messages using channel.send(str). When a message is received, channel.receivedEH(address, msg) is triggered.",
       },
       {
         type: "code",
         filename: "broadcast_example.shica",
         code:
-          'var channel = broadcast("room1", "pass");\n\n' +
+          'var channel = broadcastEO("room1", "pass");\n\n' +
           "channel.receivedEH(str addr,str msg) {\n" +
           '  print("received from", addr, ":", msg);\n' +
           "}\n\n" +
@@ -594,7 +594,7 @@ export const lessons: Lesson[] = [
       },
       {
         type: "paragraph",
-        text: "Create a timer object with timer(). You can reset the timer counter using t.reset(0). The timer triggers t.secEH(s), where s is the current seconds count since reset.",
+        text: "Create a timer object with timerEO(). You can reset the timer counter using t.reset(0). The timer triggers t.secEH(s), where s is the current seconds count since reset.",
       },
       {
         type: "code",

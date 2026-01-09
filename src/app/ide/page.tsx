@@ -128,8 +128,8 @@ const ShicaPage = () => {
     console.log(`✅ User ${number} fully connected to ${channel}`);
   }, [addUser, connectUserToTopic, userSessions]);
 
-  const _sendWebRtcBroadcast = useCallback((index: number, msg: string, num: number) => {
-    console.log(`📡 Sending WebRTC Broadcast Message from User: ${index} to ${num}`);
+  const _sendWebRtcBroadcast = useCallback((index: number, msg: string) => {
+    console.log(`📡 Sending WebRTC Broadcast Message from User: ${index} to all`);
     sendMessage(index, msg);
   }, [sendMessage]);
 
