@@ -600,7 +600,7 @@ export const lessons: Lesson[] = [
         type: "code",
         filename: "timer_example.shica",
         code:
-          "var t = timer();\n" +
+          "var t = timerEO();\n" +
           "t.reset(0);\n\n" +
           "t.secEH(int s) {\n" +
           '  print("timer s =", s);\n' +
