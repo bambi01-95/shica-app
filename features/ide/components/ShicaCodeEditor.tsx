@@ -43,6 +43,7 @@ export const ShicaCodeEditor: React.FC<CodeEditorProps> = ({
   // シンタックスハイライトの適用
   const highlightCode = (text: string) => {
     const keywords = [
+      "state",
       "stt",
       "var",
       "func",

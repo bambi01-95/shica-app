@@ -52,7 +52,7 @@ export interface Robot {
 
 // Example codes for initial state
 
-interface Agent{
+interface Agent {
   uid: number;
   filename: string;
   code: string;
@@ -90,7 +90,6 @@ const ShicaPage = () => {
   const [codes, setCodes] = useState<CodeItem[]>(initialCodes);
   const [hydrated, setHydrated] = useState(false);
 
-
   const updateItem = (index: number, newValue: string) => {
     setCodes((prev) =>
       prev.map((item, i) => (i === index ? { ...item, code: newValue } : item))
@@ -113,29 +112,44 @@ const ShicaPage = () => {
   const [logs, setLogs] = useState<Log[]>([]);
 
   const {
-     addUser,
-     connectUserToTopic,
-     sendMessage,
-     disconnectUserFromTopic,
-     userSessions,
+    addUser,
+    connectUserToTopic,
+    sendMessage,
+    disconnectUserFromTopic,
+    userSessions,
   } = useShicaWebRTC(Module, isReady);
 
-  const _addWebRtcBroadcast = useCallback(async (number: number, channel: string, password: string, ptr: any) => {
-    console.log(`🛜 Adding WebRTC Broadcast User: ${number} to channel: ${channel}`);
-    await addUser(number, ptr);
-    console.log(`🔍 After addUser: session exists=${userSessions.has(number)}`);
-    await connectUserToTopic(number, channel, ptr);
-    console.log(`✅ User ${number} fully connected to ${channel}`);
-  }, [addUser, connectUserToTopic, userSessions]);
+  const _addWebRtcBroadcast = useCallback(
+    async (number: number, channel: string, password: string, ptr: any) => {
+      console.log(
+        `🛜 Adding WebRTC Broadcast User: ${number} to channel: ${channel}`
+      );
+      await addUser(number, ptr);
+      console.log(
+        `🔍 After addUser: session exists=${userSessions.has(number)}`
+      );
+      await connectUserToTopic(number, channel, ptr);
+      console.log(`✅ User ${number} fully connected to ${channel}`);
+    },
+    [addUser, connectUserToTopic, userSessions]
+  );
 
-  const _sendWebRtcBroadcast = useCallback((index: number, msg: string, num: number) => {
-    console.log(`📡 Sending WebRTC Broadcast Message from User: ${index} to ${num}`);
-    sendMessage(index, msg);
-  }, [sendMessage]);
+  const _sendWebRtcBroadcast = useCallback(
+    (index: number, msg: string) => {
+      console.log(
+        `📡 Sending WebRTC Broadcast Message from User: ${index} to all`
+      );
+      sendMessage(index, msg);
+    },
+    [sendMessage]
+  );
 
-  const _removeWebRtcBroadcast = useCallback((number: number, channel: string) => {
-    disconnectUserFromTopic(number, channel);
-  }, [disconnectUserFromTopic]);
+  const _removeWebRtcBroadcast = useCallback(
+    (number: number, channel: string) => {
+      disconnectUserFromTopic(number, channel);
+    },
+    [disconnectUserFromTopic]
+  );
 
   const addWebRtcBroadcastRef = useRef(_addWebRtcBroadcast);
   const sendWebRtcBroadcastRef = useRef(_sendWebRtcBroadcast);
@@ -155,12 +169,15 @@ const ShicaPage = () => {
 
   useEffect(() => {
     if (!isReady) return;
-    (globalThis as any)._addWebRtcBroadcast = (...args: Parameters<typeof _addWebRtcBroadcast>) =>
-      addWebRtcBroadcastRef.current?.(...args);
-    (globalThis as any)._sendWebRtcBroadcast = (...args: Parameters<typeof _sendWebRtcBroadcast>) =>
-      sendWebRtcBroadcastRef.current?.(...args);
-    (globalThis as any)._removeWebRtcBroadcast = (...args: Parameters<typeof _removeWebRtcBroadcast>) =>
-      removeWebRtcBroadcastRef.current?.(...args);
+    (globalThis as any)._addWebRtcBroadcast = (
+      ...args: Parameters<typeof _addWebRtcBroadcast>
+    ) => addWebRtcBroadcastRef.current?.(...args);
+    (globalThis as any)._sendWebRtcBroadcast = (
+      ...args: Parameters<typeof _sendWebRtcBroadcast>
+    ) => sendWebRtcBroadcastRef.current?.(...args);
+    (globalThis as any)._removeWebRtcBroadcast = (
+      ...args: Parameters<typeof _removeWebRtcBroadcast>
+    ) => removeWebRtcBroadcastRef.current?.(...args);
     console.log("🌐 Registered WebRTC bridge functions to globalThis");
 
     return () => {
@@ -169,7 +186,7 @@ const ShicaPage = () => {
       delete (globalThis as any)._removeWebRtcBroadcast;
     };
   }, [isReady]);
-  
+
   //for user sample code
   const [clickXY, setClickXY] = useState<{ x: number; y: number }>({
     x: 0,
@@ -204,7 +221,7 @@ const ShicaPage = () => {
     ]);
     setSelectedIndex(codes.length); // 新しく追加したファイルを選択
     addRobot();
-    addUser(codes.length, 0);//WebRTC OptBroadcast user add
+    addUser(codes.length, 0); //WebRTC OptBroadcast user add
     const ret = Module?.ccall("addWebCode", "number", [], []);
     if (ret !== 0) {
       console.error("Failed to add web code");
@@ -300,7 +317,7 @@ const ShicaPage = () => {
       [0]
     );
     // TEST
-//REVIEW
+    //REVIEW
     for (let i = 0; i < 12; i++) {
       const index = Module.getValue(
         agentDataPtr + i * 36 + agentObjectOffset.index,
@@ -343,10 +360,10 @@ const ShicaPage = () => {
       } else {
         addLog(LogLevel.INFO, "Initialized web codes");
         addLog(LogLevel.SUCCESS, `touch ${codes[0].filename}`);
-        
+
         // Initialize WebRTC sessions for initial agents
         for (let i = 0; i < codes.length; i++) {
-          addUser(i,0); // Add user with dummy pointer
+          addUser(i, 0); // Add user with dummy pointer
           console.log(`🔧 Initialized WebRTC session for Agent ${i}`);
         }
       }
@@ -361,8 +378,8 @@ const ShicaPage = () => {
     const ret = Module.ccall(
       "compileWebCode",
       "number",
-      [ "number", "string"],
-      [ selectedIndex, selectedCode]
+      ["number", "string"],
+      [selectedIndex, selectedCode]
     );
     // change .shica to .stt, and meke output filename
     const outputFilename = codes[selectedIndex].filename.replace(
@@ -439,7 +456,7 @@ const ShicaPage = () => {
           ["number"],
           [0]
         );
-//REVIEW
+        //REVIEW
         for (let i = 0; i < codes.length; i++) {
           const robot = robotsRef.current[i];
           const offset = i * 36; // 4 bytes each for x, y, vx, vy
@@ -479,7 +496,7 @@ const ShicaPage = () => {
             "i32"
           );
         }
-        setForceUpdate((prev) => prev + 1); 
+        setForceUpdate((prev) => prev + 1);
         setTime(time + fps);
         Module.setValue(Module.clickPtr + 8, 0, "i32"); // inactive
       }, fps);
@@ -565,7 +582,7 @@ const ShicaPage = () => {
         )
       );
     };
-    reader.readAsText(file); 
+    reader.readAsText(file);
   };
   // Download code.stt button
   const downloadSTTFile = async () => {
@@ -589,14 +606,13 @@ const ShicaPage = () => {
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
-//STORE CODE IN LOCALSTORAGE
+  //STORE CODE IN LOCALSTORAGE
   useEffect(() => {
     try {
       const saved = localStorage.getItem("codes");
       if (saved) setCodes(JSON.parse(saved) as CodeItem[]);
       const robotsSaved = localStorage.getItem("robots");
       if (robotsSaved) robotsRef.current = JSON.parse(robotsSaved);
-
     } catch {
       // ignore
     } finally {
@@ -609,7 +625,6 @@ const ShicaPage = () => {
     localStorage.setItem("codes", JSON.stringify(codes));
     localStorage.setItem("robots", JSON.stringify(robotsRef.current));
   }, [codes, hydrated]);
-
 
   if (!hydrated) {
     return null; // or Skeleton
