@@ -65,7 +65,8 @@ type CodeItem = {
 };
 
 const sampleCode: string = `// Simple Click Example
-stt s1(){
+// Click on the map to move the robot vacuum to that position
+state s1(){
   entryEH(){
     print("Hello Shica");
   }
