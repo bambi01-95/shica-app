@@ -258,14 +258,10 @@ var stackRestore = (val) => __emscripten_stack_restore(val);
 var stackSave = () => _emscripten_stack_get_current();
 var UTF8Decoder =
   typeof TextDecoder != "undefined" ? new TextDecoder() : undefined;
-var findStringEnd = (heapOrArray, idx, maxBytesToRead, ignoreNul) => {
-  var maxIdx = idx + maxBytesToRead;
-  if (ignoreNul) return maxIdx;
-  while (heapOrArray[idx] && !(idx >= maxIdx)) ++idx;
-  return idx;
-};
-var UTF8ArrayToString = (heapOrArray, idx = 0, maxBytesToRead, ignoreNul) => {
-  var endPtr = findStringEnd(heapOrArray, idx, maxBytesToRead, ignoreNul);
+var UTF8ArrayToString = (heapOrArray, idx = 0, maxBytesToRead = NaN) => {
+  var endIdx = idx + maxBytesToRead;
+  var endPtr = idx;
+  while (heapOrArray[endPtr] && !(endPtr >= endIdx)) ++endPtr;
   if (endPtr - idx > 16 && heapOrArray.buffer && UTF8Decoder) {
     return UTF8Decoder.decode(heapOrArray.subarray(idx, endPtr));
   }
@@ -297,8 +293,8 @@ var UTF8ArrayToString = (heapOrArray, idx = 0, maxBytesToRead, ignoreNul) => {
   }
   return str;
 };
-var UTF8ToString = (ptr, maxBytesToRead, ignoreNul) =>
-  ptr ? UTF8ArrayToString(HEAPU8, ptr, maxBytesToRead, ignoreNul) : "";
+var UTF8ToString = (ptr, maxBytesToRead) =>
+  ptr ? UTF8ArrayToString(HEAPU8, ptr, maxBytesToRead) : "";
 var ___assert_fail = (condition, filename, line, func) =>
   abort(
     `Assertion failed: ${UTF8ToString(condition)}, at: ` +
@@ -773,10 +769,6 @@ var MEMFS = {
       }
     },
     lookup(parent, name) {
-      if (!MEMFS.doesNotExistError) {
-        MEMFS.doesNotExistError = new FS.ErrnoError(44);
-        MEMFS.doesNotExistError.stack = "<generic error, no stack>";
-      }
       throw MEMFS.doesNotExistError;
     },
     mknod(parent, name, mode, dev) {
@@ -1116,7 +1108,6 @@ var FS = {
           current_path = PATH.dirname(current_path);
           if (FS.isRoot(current)) {
             path = current_path + "/" + parts.slice(i + 1).join("/");
-            nlinks--;
             continue linkloop;
           } else {
             current = current.parent;
@@ -2654,7 +2645,6 @@ function ___syscall_ioctl(fd, op, varargs) {
         if (!stream.tty) return -59;
         return -28;
       }
-      case 21537:
       case 21531: {
         var argp = syscallGetVarargP();
         return FS.ioctl(stream, op, argp);
@@ -2697,9 +2687,9 @@ function ___syscall_openat(dirfd, path, flags, varargs) {
     return -e.errno;
   }
 }
-function __lib_web_rtc_broadcast_send_(index, msgPtr, num) {
+function __lib_web_rtc_broadcast_send_(index, msgPtr) {
   const msg = UTF8ToString(msgPtr);
-  _sendWebRtcBroadcast(index, msg, num);
+  _sendWebRtcBroadcast(index, msg);
   return 0;
 }
 function __web_rtc_broadcast_eo_(index, channelPtr, passwordPtr, ptr) {
@@ -2889,6 +2879,8 @@ var cwrap = (ident, returnType, argTypes, opts) => {
 };
 FS.createPreloadedFile = FS_createPreloadedFile;
 FS.staticInit();
+MEMFS.doesNotExistError = new FS.ErrnoError(44);
+MEMFS.doesNotExistError.stack = "<generic error, no stack>";
 {
   if (Module["noExitRuntime"]) noExitRuntime = Module["noExitRuntime"];
   if (Module["preloadPlugins"]) preloadPlugins = Module["preloadPlugins"];
