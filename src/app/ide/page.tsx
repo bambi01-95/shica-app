@@ -398,6 +398,11 @@ const ShicaPage = () => {
       processError();
       return;
     }
+    setCodes((prev) =>
+      prev.map((item, i) =>
+        i === selectedIndex ? { ...item, compiled: true } : item
+      )
+    );
     addLog(
       LogLevel.SUCCESS,
       `shica ${outputFilename} -o ${codes[selectedIndex].filename}`
@@ -528,9 +533,36 @@ const ShicaPage = () => {
   }, [isRunning, Module, isReady]);
 
   const run = () => {
-    if (!isCompiled) {
-      addLog(LogLevel.ERROR, "run failed - compile first");
-      return;
+    // check all codes are compiled
+    for (let i = 0; i < codes.length; i++) {
+      if (!codes[i].compiled) {
+        const ret = Module.ccall(
+          "compileWebCode",
+          "number",
+          ["number", "string"],
+          [i, codes[i].code]
+        );
+        if (ret !== 0) {
+          addLog(
+            LogLevel.ERROR,
+            `run failed - compile error in ${codes[i].filename}`
+          );
+          processError();
+          return;
+        } else {
+          setCodes((prev) =>
+            prev.map((item, idx) =>
+              idx === i ? { ...item, compiled: true } : item
+            )
+          );
+          addLog(
+            LogLevel.SUCCESS,
+            `shica ${codes[i].filename.replace(/\.shica$/, ".stt")} -o ${
+              codes[i].filename
+            }`
+          );
+        }
+      }
     }
     setIsRunning(!isRunning);
   };
