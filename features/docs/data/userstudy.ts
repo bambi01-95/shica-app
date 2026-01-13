@@ -67,6 +67,12 @@ export const userstudy: Lesson[] = [
           "Please focus on describing and understanding system behavior, rather than writing complex algorithms.",
         ],
       },
+      {
+        type: "hint",
+        title: "Hint1: Time Management",
+        text: "You have 40 minutes for each environment. Please manage your time accordingly.",
+        code: "state timeManagement(){\n\t// Keep an eye on the clock!\n}",
+      },
     ],
   },
 
@@ -114,6 +120,63 @@ export const userstudy: Lesson[] = [
         type: "info",
         text: "This task focuses on handling time-based state changes and varying responses to the same event.",
       },
+      {
+        type: "heading",
+        text: "Shica hints",
+      },
+      {
+        type: "hint",
+        title: "Hint1: structure",
+        text:
+          "You can use a <b>state</b> to define the behavior of the agent. Inside the state, you can define event handlers for time and click events." +
+          "<a href='/docs/'><u><b> See docs > state features</b></u></a> for more details.",
+        items: [
+          "how many states you need.",
+          "what event handlers to define in each state. (docs > event functions)",
+          "how to transition between states. (docs > state features)",
+        ],
+        code: "state morningState(){\n\t//eventhandler(){...} //Define time event handler here\n\t//eventhandler(){...} //Define click event handler here\n}",
+      },
+      {
+        type: "hint",
+        title: "Hint2: Event Handlers and Functions",
+        text: "You can see the example code at <a href='/docs/'><u>docs</u></a> > event functions | common. functions.",
+        items: [
+          "timerEH(int sec): Event handler called every second by the timer event object.",
+          "clickEH(int x, int y): Event handler called when the agent is clicked, providing the click coordinates.",
+          "print(string msg): Function to print messages to the console.",
+          "state stateName;: Move to another state using this syntax.",
+        ],
+      },
+      {
+        type: "hint",
+        title: "Hint3: Comment out",
+        text: "You can comment out lines using '//' at the beginning of the line. This is useful for temporarily disabling code while testing.",
+        code:
+          "state morining(){\n\t// timerEH(int sec) {\n\t    //If 5 seconds have passed\n\t\t// state transition to next state\n\t// }\n\n\t// clickEH(int x, int y) {\n\t//     //print out message\n\t// }\n}" +
+          "\nstate afternoon(){\n\t//similar to morning state\n}" +
+          "\nstate evening(){\n\t//similar to morning state\n}",
+      },
+      {
+        type: "heading",
+        text: "JavaScript hints",
+      },
+      {
+        type: "hint",
+        title: "Hint1: Function",
+      },
+      {
+        type: "hint",
+        title: "Hint2: Structure",
+      },
+      {
+        type: "hint",
+        title: "Hint3: Comment out",
+        code: "//define variable 'currentStateIndex' to manage current state\n" +
+        "define array messages = ['Good morning', 'Good afternoon', 'Good evening'];\n" +
+        "connect click event to the agent element\n" +
+        "",
+      },
     ],
   },
 
@@ -156,6 +219,62 @@ export const userstudy: Lesson[] = [
       {
         type: "info",
         text: "This task examines how continuous behavior and temporary state changes can be expressed.",
+      },
+      {
+        type: "heading",
+        text: "Shica hints",
+      },
+      {
+        type: "hint",
+        title: "Hint1: Function",
+        text:
+          "You can starting from following steps" +
+          "(You can see the example code at <a href='/docs/'><u>docs</u></a> > event features)",
+        items: [
+          "How many state you need.",
+          "What event handlers to define in each state.",
+          "How to manage velocity and position of the agent.",
+          "How to handle timing for stopping and resuming movement.",
+        ],
+      },
+      {
+        type: "hint",
+        title: "Hint2: Structure",
+        text: "You can structure your code as follows:",
+        items: [
+          "there are two states: <b>movingState</b> and <b>stoppedState</b>.",
+          "<b>collisionEH(int xdir,int ydir)</b>: to handle boundary collisions and reverse direction.",
+          "<b>touchEH(int count)</b>: to handle click agents and transition to stoppedState.",
+          "You need to use <b>global variables</b> to manage velocity in x and y directions.",
+          "In stoppedState, use a <b>timerEH(int sec)</b> to count 3 seconds before transitioning back to movingState.",
+        ],
+      },
+      {
+        type: "hint",
+        title: "Hint3: Comment out",
+        code:
+          "//define vx (velocity in x direction)\n//define vy (velocity in y direction)\n" +
+          "state movingState(){\n\tentryEH(){\n\t\t//set velocity (vx, vy);\n\t}\n\t____EH(type args){\n\t\t//if x direction is collision\n\t\t\t//reverse x velocity\n\t\t//if y direction is collision\n\t\t\t//reverse y velocity\n\t}\n\t____EH(type args){//trigger when touch\n\t\t//state change to stoppedState\n\t}\n}" +
+          "\nstate stoppedState(){\n\tentryEH(){\n\t\t//store current velocity\n\t\t//set velocity(0, 0);\n\t}\n\ttimerEH(int sec){//Define time event handler here" +
+          "\n\t\t//if 3 seconds left" +
+          "\n\t\t\t//state transition movingState\n\t}" +
+          "\n}",
+      },
+      {
+        type: "heading",
+        text: "JavaScript hints",
+      },
+      {
+        type: "hint",
+        title: "Hint1: Function",
+      },
+      {
+        type: "hint",
+        title: "Hint2: Structure",
+      },
+      {
+        type: "hint",
+        title: "Hint3: Comment out",
       },
     ],
   },
@@ -203,6 +322,66 @@ export const userstudy: Lesson[] = [
       {
         type: "info",
         text: "This task focuses on managing shared state and coordination between multiple agents.",
+      },
+      {
+        type: "heading",
+        text: "Shica hints",
+      },
+      {
+        type: "hint",
+        title: "Hint1: Function",
+        text:
+          "You can add agent by click add file. But you should consider the following points:" +
+          " (You can see the example code at <a href='/docs/'><u>docs</u></a> > distributed features)",
+        items: [
+          "How many state you need.",
+          "What event handlers to define in each state.",
+          "How to use broadcast event objects for inter-agent communication.",
+          "All agents program is same or not.",
+        ],
+      },
+      {
+        type: "hint",
+        title: "Hint2: Structure",
+        text: "You can structure your code as follows:",
+        items: [
+          "Define two states: <b>on</b> and <b>off</b>. Entering each state changes the agent's color accordingly.",
+          "Use a <b>broadcast event object</b> to notify other agents when one agent is selected.",
+          "In the <b>off</b> state, handle click events to transition to the <b>on</b> state.",
+          "In the <b>on</b> state, handle click events to transition back to the <b>off</b> state. Also, handle events from the broadcast object to transition back to <b>off</b> when another agent is selected.",
+        ],
+      },
+      {
+        type: "hint",
+        title: "Hint3: Comment out",
+        code: 
+        "//define channle variable as new broadcast event object\n" +
+        "state off(){\n\t" + 
+        "__EH(){//trigger when entring this state\n\t//set a color black\n\t}\n" +
+        "\t__EH(type args){//trigger when agent click\n"+
+        "\t\t//state change to on\n\t}\n}\n" +
+        "state on(){\n\t" +
+        "__EH(){//trigger when entering this state\n\t\t//set a color white\n\t\t//send message to channel\n\t}\n" +
+        "\t__EH(type args){//trigger when agent click\n"+
+        "\t\t//state change to off\n\t}\n" +
+        "\tchannel.__EH(type args){//trigger when receiving message from channel\n\t\t//state change to off\n\t}\n" +
+        "}",
+      },
+      {
+        type: "heading",
+        text: "JavaScript hints",
+      },
+      {
+        type: "hint",
+        title: "Hint1: Function",
+      },
+      {
+        type: "hint",
+        title: "Hint2: Structure",
+      },
+      {
+        type: "hint",
+        title: "Hint3: Comment out",
       },
     ],
   },

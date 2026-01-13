@@ -6,7 +6,8 @@ export interface Lesson {
 }
 
 export interface ContentSection {
-  type: "paragraph" | "heading" | "list" | "code" | "info" | "tryit" | "figure";
+  type: "paragraph" | "heading" | "list" | "code" | "info" | "tryit" | "figure" | "hint";
+  title?: string;
   text?: string;
   items?: string[];
   code?: string;
