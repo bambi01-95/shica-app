@@ -104,7 +104,7 @@ function LessonContent({ lesson }: LessonContentProps) {
                     <CodeBlock
                       code={section.code}
                       output={section.output}
-                      filename={"hint_example.shica"}
+                      filename={section.filename || "hint_example.shica"}
                     />
                   </div>
                 )}
