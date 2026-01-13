@@ -1,63 +1,80 @@
 "use client";
 import { useEffect, useState } from "react";
 
-export function useVM() {
-  const [Module, setModule] = useState<any>(null);
-  const [isReady, setIsReady] = useState(false); // 初期化済みフラグ
+declare global {
+  interface Window {
+    Module?: any;
+    __shicaVmLoadPromise?: Promise<any>;
+  }
+}
 
-  useEffect(() => {
-    let isMounted = true;
+const SCRIPT_ID = "shica-vm-script";
 
-    const loadVM = async () => {
-      // vm.jsはESMではなく、通常のスクリプトとしてグローバルにModuleをエクスポートしている場合を考慮
-      // そのため、importではなく、動的にscriptタグを挿入してロードする
-      if (typeof window !== "undefined") {
-        // すでにロード済みなら再ロードしない
-        if ((window as any).Module) {
-          const instance = (window as any).Module;
-          if (isMounted) {
-            setModule(instance);
-            setIsReady(true);
-          }
-          return;
-        }
+function loadShicaOnce() {
+  if (typeof window === "undefined") return Promise.reject("no window");
 
-        const script = document.createElement("script");
-        script.src = "/ide/js/shica.js";
-        script.async = true;
-        
-        script.onload = () => {
-          // shica-web.jsがグローバルにModuleを定義している前提
-          const instance = (window as any).Module;
-          if (instance) {
-            // locateFileやonRuntimeInitializedをセット
-            instance.locateFile = (path: string) => `/ide/js/${path}`;
-            instance.onRuntimeInitialized = () => {
-              console.log("✅ WASM initialized");
+  // すでにロード済み
+  if (window.Module && window.Module.ccall) return Promise.resolve(window.Module);
 
-              const ret = instance.ccall("memory_init", "number", [], []);
-              if (ret !== 0) {
-                console.error("Failed to initialize memory");
-                return;
-              }
-              instance.timerPtr = instance.ccall("initWebTimerPtr", "number", [], []);
-              instance.clickPtr = instance.ccall("initWebClickSTTPtr", "number", [], []);
-              instance.agentsPtr = instance.ccall("initALLAgentDataPtr", "number", ["number"], [12]);
-              if (isMounted) {
-                setModule(instance);
-                setIsReady(true);
-              }
-            };
-          }
-        };
-        document.body.appendChild(script);
+  // ロード中を共有（同時呼び出し対策）
+  if (window.__shicaVmLoadPromise) return window.__shicaVmLoadPromise;
+
+  window.__shicaVmLoadPromise = new Promise<any>((resolve, reject) => {
+    // scriptを挿入する前に Module 設定を用意（重要）
+    window.Module = window.Module || {};
+    window.Module.locateFile = (path: string) => `/ide/js/${path}`;
+    window.Module.onRuntimeInitialized = () => {
+      try {
+        const m = window.Module!;
+        const ret = m.ccall("memory_init", "number", [], []);
+        if (ret !== 0) throw new Error("Failed to initialize memory");
+
+        m.timerPtr  = m.ccall("initWebTimerPtr", "number", [], []);
+        m.clickPtr  = m.ccall("initWebClickSTTPtr", "number", [], []);
+        m.agentsPtr = m.ccall("initALLAgentDataPtr", "number", ["number"], [12]);
+
+        resolve(m);
+      } catch (e) {
+        reject(e);
       }
     };
 
-    loadVM();
+    // scriptタグを一意化（重要）
+    const existing = document.getElementById(SCRIPT_ID) as HTMLScriptElement | null;
+    if (existing) {
+      // 既存scriptがあるのに初期化が進まない場合のため
+      existing.addEventListener("error", () => reject(new Error("script load error")));
+      return;
+    }
 
+    const script = document.createElement("script");
+    script.id = SCRIPT_ID;
+    script.src = "/ide/js/shica.js";
+    script.async = true;
+    script.onerror = () => reject(new Error("script load error"));
+    document.body.appendChild(script);
+  });
+
+  return window.__shicaVmLoadPromise;
+}
+
+export function useVM() {
+  const [Module, setModule] = useState<any>(null);
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    let alive = true;
+    loadShicaOnce()
+      .then((m) => {
+        if (!alive) return;
+        setModule(m);
+        setIsReady(true);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
     return () => {
-      isMounted = false;
+      alive = false;
     };
   }, []);
 
