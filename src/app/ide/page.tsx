@@ -97,7 +97,7 @@ const ShicaPage = () => {
     );
   };
 
-  const robotsRef = useRef<Robot[]>([{ x: 0, y: 0, r: 0, g: 0, b: 0 }]);
+  const robotsRef = useRef<Robot[]>([{ x: 25, y: 25, r: 0, g: 0, b: 0 }]);
 
   const mapRef = useRef<HTMLDivElement>(null);
   const [time, setTime] = useState(0);
@@ -200,8 +200,8 @@ const ShicaPage = () => {
   const addRobot = () => {
     const numRobots = robotsRef.current.length;
     const newRobot: Robot = {
-      x: 50 * numRobots,
-      y: 0,
+      x: 50 * numRobots + 25,
+      y: 25,
       r: 0,
       g: 0,
       b: 0,
@@ -636,7 +636,7 @@ const ShicaPage = () => {
     setCodes(initialCodes);
     setSelectedIndex(0);
     // Reset robots
-    robotsRef.current = [{ x: 0, y: 0, r: 0, g: 0, b: 0 }];
+    robotsRef.current = [{ x: 25, y: 25, r: 0, g: 0, b: 0 }];
   };
   // END of Hook declarations
 
