@@ -270,7 +270,8 @@ export const lessons: Lesson[] = [
       {
         type: "code",
         filename: "variables.shica",
-        code: '// Variable declaration and initialization\nstr name= "Taro"\nint age = 25\nflo height = 175.5\nprint(name)\nprint(age)',
+        code: '// Variable declaration and initialization\nstr name= "Taro"\nint age = 25\nflo height = 175.5\n' + 
+        'state MyState(){\n    entryEH(){\n        print(name)\n        print(age)\n    }\n}',
       },
       {
         type: "heading",
@@ -298,6 +299,22 @@ export const lessons: Lesson[] = [
         code: '// Event object example\nvar t = timerEO();\nstate OneSecTimer(){\n    t.secEH(int sec:sec%1==0){\n        print("Every second");\n    }\n}',
         output: "Every second\nEvery second\n...",
       },
+      {
+        type: "heading",
+        text: "Variable Scope",
+      },
+      {
+        type: "paragraph",
+        text: "Variables in Shica have scope, which determines where they can be accessed. " +
+          "Variables declared within a state or event handler are local to that block, while variables declared outside of any state are global and can be accessed from any state or event handler.",
+      },
+      {
+        type: "code",
+        filename: "variable_scope.shica",
+        code: '// Variable scope example\nint globalVar = 10; // Global variable\nstate MyState(){\n    int stateLocalVar = 5; // State local variable\n    entryEH(){\n        int localVar = 3; // Local variable\n        print("Global Variable:", globalVar);\n        print("State Local Variable:", stateLocalVar);\n        print("Local Variable:", localVar);\n   }\n   clickEH(int x,int y){\n     print("State local variable:", stateLocalVar);//\n     state AnotherState;\n   }\n}'+
+        '\nstate AnotherState(){\n    entryEH(){\n        // print("State Local Variable:", stateLocalVar); // Error: stateLocalVar is not accessible here\n        print("Global Variable:", globalVar); // Accessible\n    }\n}',
+        output: "Global Variable: 10\nState Local Variable: 5\nLocal Variable: 3\nGlobal Variable: 10",
+      }
     ],
   },
   {
@@ -382,7 +399,7 @@ export const lessons: Lesson[] = [
       {
         type: "code",
         filename: "log_example.shica",
-        code: 'log("Debug message");\nlog(getX(), getY());',
+        code: 'state exampleLog(){\n    entryEH(){\n        log("Debug message");\n        log(getX(), getY());\n    }\n}',
         output: "Debug message\n<current x> <current y>",
       },
 
@@ -397,7 +414,7 @@ export const lessons: Lesson[] = [
       {
         type: "code",
         filename: "print_example.shica",
-        code: 'print("Hello, World!");\nprint("x =", getX(), "y =", getY());',
+        code: 'state examplePrint(){\n    entryEH(){\n        print("Hello, World!");\n        print("x =", getX(), "y =", getY());\n    }\n}',
         output: "Hello, World!\nx = <current x> y = <current y>",
       },
 
@@ -408,17 +425,13 @@ export const lessons: Lesson[] = [
       },
       {
         type: "paragraph",
-        text: "These functions directly set the rover position. setXY sets both axes at once; setX/setY update only one axis. getX/getY returns the current rover position.",
+        text: "These functions directly set the rover position. <b>setXY(x, y)</b> sets both axes at once; <b>setX(x)</b>/<b>setY(y)</b> update only one axis. <b>getX()</b>/<b>getY()</b> returns the current rover position.",
       },
       {
         type: "code",
         filename: "position_example.shica",
         code:
-          "setXY(100, 80);\n" +
-          'print("pos =", getX(), getY());\n\n' +
-          "setX(120);\n" +
-          "setY(60);\n" +
-          'print("pos =", getX(), getY());',
+          "state examplePosition(){\n    entryEH(){\n        setXY(100, 80);\n        print(\"pos =\", getX(), getY());\n\n        setX(120);\n        setY(60);\n        print(\"pos =\", getX(), getY());\n    }\n}",
         output: "pos = 100 80\n" + "pos = 120 60",
       },
 
@@ -429,16 +442,16 @@ export const lessons: Lesson[] = [
       },
       {
         type: "paragraph",
-        text: "These functions set the rover velocity (vx, vy). setVXY sets both components, while setVX/setVY updates one component. getVX/getVY returns the current velocity values.",
+        text: "These functions set the rover velocity (vx, vy). <b>setVXY(vx, vy)</b> sets both components, while <b>setVX(vx)</b>/<b>setVY(vy)</b> updates one component. <b>getVX()</b>/<b>getVY()</b> returns the current velocity values.",
       },
       {
         type: "code",
         filename: "velocity_example.shica",
         code:
-          "setVXY(2, 0);\n" +
-          'print("v =", getVX(), getVY());\n\n' +
-          "setVY(-3);\n" +
-          'print("v =", getVX(), getVY());',
+          "state exampleVelocity(){\n    entryEH(){\n        setVXY(2, 0);\n" +
+          '        print("v =", getVX(), getVY());\n\n' +
+          "        setVY(-3);\n" +
+          '        print("v =", getVX(), getVY());\n    }\n}',
         output: "v = 2 0\n" + "v = 2 -3",
       },
 
@@ -449,16 +462,17 @@ export const lessons: Lesson[] = [
       },
       {
         type: "paragraph",
-        text: "setColor(r, g, b) changes the rover color. Each component (r, g, b) represents the intensity of red, green, and blue. Use this to visualize states or interactions.",
+        text: "<b>setColor(r, g, b)</b> changes the rover color. Each component (r, g, b) represents the intensity of red, green, and blue. Use this to visualize states or interactions.",
       },
       {
         type: "code",
         filename: "color_example.shica",
         code:
-          "setColor(255, 0, 0);\n" +
-          'print("Color set to red");\n\n' +
-          "setColor(0, 255, 255);\n" +
-          'print("Color set to cyan");',
+          "state exampleColor(){\n    entryEH(){\n" +
+          "        setColor(255, 0, 0);\n" +
+          '        print("Color set to red");\n\n' +
+          "        setColor(0, 255, 255);\n" +
+          '        print("Color set to cyan");\n    }\n}',
         output: "Color set to red\n" + "Color set to cyan",
       },
     ],
@@ -493,7 +507,7 @@ export const lessons: Lesson[] = [
       {
         type: "code",
         filename: "timer_example.shica",
-        code: "timerEH(int sec) {\n" + '  print("tick =", sec);\n' + "}",
+        code: "state exampleTimer(){\n    timerEH(int sec) {\n" + '        print("tick =", sec);\n' + "    }\n}",
         output: "tick = 1\ntick = 2\n...",
       },
 
@@ -509,9 +523,9 @@ export const lessons: Lesson[] = [
         type: "code",
         filename: "click_example.shica",
         code:
-          "clickEH(int x, int y) {\n" +
-          '  print("screen clicked at:", x, y);\n' +
-          "}",
+          "state exampleClick(){\n    clickEH(int x, int y) {\n" +
+          '        print("screen clicked at:", x, y);\n' +
+          "    }\n}",
         output: "screen clicked at: 10 20\nscreen clicked at: 15 25\n...",
       },
 
@@ -527,10 +541,10 @@ export const lessons: Lesson[] = [
         type: "code",
         filename: "touch_example.shica",
         code:
-          "touchEH(int count) {\n" +
-          "  setColor(255, 255, 255);\n" +
-          '  print("rover touched:", count);\n' +
-          "}",
+        "state exampleTouch(){\n    touchEH(int count) {\n" +
+        "        setColor(255, 255, 255);\n" +
+        '        print("rover touched:", count);\n' +
+        "    }\n}",
         output: "rover touched: 1\nrover touched: 2\n...",
       },
 
@@ -546,13 +560,21 @@ export const lessons: Lesson[] = [
         type: "code",
         filename: "collision_example.shica",
         code:
-          "collisionEH(int x, int y) {\n" +
-          '  print("collision dir:", x, y);\n' +
-          "  // Example: simple bounce\n" +
-          "  if (x != 0) setVX(-getVX());\n" +
-          "  if (y != 0) setVY(-getVY());\n" +
+          "state exampleCollision(){\n" +
+          "    entryEH() {\n" +
+          "        setVX(5);\n" +
+          "    }\n" +
+          "    collisionEH(int x, int y) {\n" +
+          '        print("collision dir:", x, y);\n' +
+          "        // Example: simple bounce\n" +
+          "        if (x != 0) setVX(-getVX());\n" +
+          "    }\n" +
           "}",
         output: "collision dir: 1 0\ncollision dir: 0 -1\n...",
+      },
+      {
+        type: "paragraph",
+        text: "This example sets an initial velocity to the right. Upon collision, it prints the collision direction and reverses the x-velocity to simulate a bounce effect.",
       },
 
       // Event object functions
@@ -567,7 +589,7 @@ export const lessons: Lesson[] = [
 
       {
         type: "heading",
-        text: "Broadcast channel: receivedEH(address, msg)",
+        text: "Broadcast channel: receivedEH(str address, str msg)",
       },
       {
         type: "paragraph",
@@ -578,12 +600,13 @@ export const lessons: Lesson[] = [
         filename: "broadcast_example.shica",
         code:
           'var channel = broadcastEO("room1", "pass");\n\n' +
-          "channel.receivedEH(str addr,str msg) {\n" +
-          '  print("received from", addr, ":", msg);\n' +
-          "}\n\n" +
-          "clickEH(int count) {\n" +
-          '  channel.send("hello");\n' +
-          "}",
+          'state exampleBroadcast(){\n' +
+          "\tchannel.receivedEH(str addr,str msg) {\n" +
+          '        print("received from", addr, ":", msg);\n' +
+          "    }\n\n" +
+          "    clickEH(int count) {\n" +
+          '        channel.send("hello");\n' +
+          "    }\n}",
         output:
           "received from <addr> : hello 1\nreceived from <addr> : hello 2\n...",
       },
@@ -601,11 +624,16 @@ export const lessons: Lesson[] = [
         filename: "timer_example.shica",
         code:
           "var t = timerEO();\n" +
-          "t.reset(0);\n\n" +
-          "t.secEH(int s) {\n" +
-          '  print("timer s =", s);\n' +
-          "  // Example: move rover slowly to the right\n" +
-          "  setX(getX() + 1);\n" +
+          "\n" +
+          "state exampleTimer(){\n" +
+          "  t.secEH(int s) {\n" +
+          '     print("timer s =", s);\n' +
+          "     // Example: move rover slowly to the right\n" +
+          "     setX(getX() + 1);\n" +
+          "  }\n" + 
+          "  clickEH(int x, int y) {\n" +
+          "     t.reset(0); // Reset timer on click\n" +
+          "  }\n" +
           "}",
         output: "timer s = 1\ntimer s = 2\n...",
       },
