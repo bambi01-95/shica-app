@@ -71,6 +71,46 @@ function LessonContent({ lesson }: LessonContentProps) {
               />
             </div>
           )}
+          {section.type === "hint" && (
+            <details className="my-6 rounded-lg border border-slate-100 bg-slate-100 px-4 py-3">
+              <summary className="cursor-pointer select-none text-slate-800 font-medium">
+                {section.title || "Hint"}
+              </summary>
+
+              {/* 開いた中身 */}
+              <div className="mt-3 text-slate-700">
+                {section.text && section.text !== "" && (
+                  <p
+                    className="text-lg leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: section.text }}
+                  />
+                )}
+
+                {section.items && section.items.length > 0 && (
+                  <ul className="list-disc ml-6 space-y-1">
+                    {section.items.map((item, i) => (
+                      <li className="text-lg" key={i}>
+                        <p
+                            className="text-lg leading-relaxed"
+                            dangerouslySetInnerHTML={{ __html: item }}
+                          />
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {section.code && (
+                  <div className="mt-4">
+                    <CodeBlock
+                      code={section.code}
+                      output={section.output}
+                      filename={"hint_example.shica"}
+                    />
+                  </div>
+                )}
+              </div>
+            </details>
+          )}
         </section>
       ))}
     </article>

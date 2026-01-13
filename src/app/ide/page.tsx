@@ -97,7 +97,7 @@ const ShicaPage = () => {
     );
   };
 
-  const robotsRef = useRef<Robot[]>([{ x: 0, y: 0, r: 0, g: 0, b: 0 }]);
+  const robotsRef = useRef<Robot[]>([{ x: 25, y: 25, r: 0, g: 0, b: 0 }]);
 
   const mapRef = useRef<HTMLDivElement>(null);
   const [time, setTime] = useState(0);
@@ -200,8 +200,8 @@ const ShicaPage = () => {
   const addRobot = () => {
     const numRobots = robotsRef.current.length;
     const newRobot: Robot = {
-      x: 50 * numRobots,
-      y: 0,
+      x: 50 * numRobots + 25,
+      y: 25,
       r: 0,
       g: 0,
       b: 0,
@@ -212,6 +212,7 @@ const ShicaPage = () => {
 
   // <FileLists>コンポーネントのファイル管理
   const addItem = (newItem: string = "") => {
+    setIsRunInit(false); // COMPILER MODE
     setCodes((prev) => [
       ...prev,
       {
@@ -223,7 +224,12 @@ const ShicaPage = () => {
     setSelectedIndex(codes.length); // 新しく追加したファイルを選択
     addRobot();
     addUser(codes.length, 0); //WebRTC OptBroadcast user add
-    const ret = Module?.ccall("addWebCode", "number", [], []);
+    const ret = Module?.ccall(
+      "addWebCode",
+      "number",
+      ["number"],
+      [codes.length]
+    );
     if (ret !== 0) {
       console.error("Failed to add web code");
       addLog(LogLevel.ERROR, "touch failed - maximum file count reached");
@@ -353,7 +359,7 @@ const ShicaPage = () => {
         addLog(LogLevel.FATAL, "Failed to initialize web codes");
         return;
       }
-      ret = Module.ccall("addWebCode", "number", [], []);
+      ret = Module.ccall("addWebCode", "number", ["number"], [codes.length]);
       if (ret) {
         console.error("Failed to add initial web code");
         addLog(LogLevel.FATAL, "Failed to add initial web code");
@@ -392,6 +398,11 @@ const ShicaPage = () => {
       processError();
       return;
     }
+    setCodes((prev) =>
+      prev.map((item, i) =>
+        i === selectedIndex ? { ...item, compiled: true } : item
+      )
+    );
     addLog(
       LogLevel.SUCCESS,
       `shica ${outputFilename} -o ${codes[selectedIndex].filename}`
@@ -403,6 +414,13 @@ const ShicaPage = () => {
   const compile = () => {
     if (isRunning) {
       return;
+    }
+    if (isRunInit) {
+      const _ret = Module.ccall("reinitAllAgentData", "number", [], []);
+      if (_ret !== 0) {
+        addLog(LogLevel.ERROR, "Re-initialization of agent data failed");
+        return;
+      }
     }
     setIsCompiling(true);
     setIsRunInit(false);
@@ -515,9 +533,36 @@ const ShicaPage = () => {
   }, [isRunning, Module, isReady]);
 
   const run = () => {
-    if (!isCompiled) {
-      addLog(LogLevel.ERROR, "run failed - compile first");
-      return;
+    // check all codes are compiled
+    for (let i = 0; i < codes.length; i++) {
+      if (!codes[i].compiled) {
+        const ret = Module.ccall(
+          "compileWebCode",
+          "number",
+          ["number", "string"],
+          [i, codes[i].code]
+        );
+        if (ret !== 0) {
+          addLog(
+            LogLevel.ERROR,
+            `run failed - compile error in ${codes[i].filename}`
+          );
+          processError();
+          return;
+        } else {
+          setCodes((prev) =>
+            prev.map((item, idx) =>
+              idx === i ? { ...item, compiled: true } : item
+            )
+          );
+          addLog(
+            LogLevel.SUCCESS,
+            `shica ${codes[i].filename.replace(/\.shica$/, ".stt")} -o ${
+              codes[i].filename
+            }`
+          );
+        }
+      }
     }
     setIsRunning(!isRunning);
   };
@@ -636,7 +681,7 @@ const ShicaPage = () => {
     setCodes(initialCodes);
     setSelectedIndex(0);
     // Reset robots
-    robotsRef.current = [{ x: 0, y: 0, r: 0, g: 0, b: 0 }];
+    robotsRef.current = [{ x: 25, y: 25, r: 0, g: 0, b: 0 }];
   };
   // END of Hook declarations
 
