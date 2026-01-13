@@ -212,6 +212,7 @@ const ShicaPage = () => {
 
   // <FileLists>コンポーネントのファイル管理
   const addItem = (newItem: string = "") => {
+    setIsRunInit(false); // COMPILER MODE
     setCodes((prev) => [
       ...prev,
       {
@@ -223,7 +224,12 @@ const ShicaPage = () => {
     setSelectedIndex(codes.length); // 新しく追加したファイルを選択
     addRobot();
     addUser(codes.length, 0); //WebRTC OptBroadcast user add
-    const ret = Module?.ccall("addWebCode", "number", [], []);
+    const ret = Module?.ccall(
+      "addWebCode",
+      "number",
+      ["number"],
+      [codes.length]
+    );
     if (ret !== 0) {
       console.error("Failed to add web code");
       addLog(LogLevel.ERROR, "touch failed - maximum file count reached");
@@ -353,7 +359,7 @@ const ShicaPage = () => {
         addLog(LogLevel.FATAL, "Failed to initialize web codes");
         return;
       }
-      ret = Module.ccall("addWebCode", "number", [], []);
+      ret = Module.ccall("addWebCode", "number", ["number"], [codes.length]);
       if (ret) {
         console.error("Failed to add initial web code");
         addLog(LogLevel.FATAL, "Failed to add initial web code");
@@ -403,6 +409,13 @@ const ShicaPage = () => {
   const compile = () => {
     if (isRunning) {
       return;
+    }
+    if (isRunInit) {
+      const _ret = Module.ccall("reinitAllAgentData", "number", [], []);
+      if (_ret !== 0) {
+        addLog(LogLevel.ERROR, "Re-initialization of agent data failed");
+        return;
+      }
     }
     setIsCompiling(true);
     setIsRunInit(false);

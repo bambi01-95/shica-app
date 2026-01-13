@@ -258,10 +258,14 @@ var stackRestore = (val) => __emscripten_stack_restore(val);
 var stackSave = () => _emscripten_stack_get_current();
 var UTF8Decoder =
   typeof TextDecoder != "undefined" ? new TextDecoder() : undefined;
-var UTF8ArrayToString = (heapOrArray, idx = 0, maxBytesToRead = NaN) => {
-  var endIdx = idx + maxBytesToRead;
-  var endPtr = idx;
-  while (heapOrArray[endPtr] && !(endPtr >= endIdx)) ++endPtr;
+var findStringEnd = (heapOrArray, idx, maxBytesToRead, ignoreNul) => {
+  var maxIdx = idx + maxBytesToRead;
+  if (ignoreNul) return maxIdx;
+  while (heapOrArray[idx] && !(idx >= maxIdx)) ++idx;
+  return idx;
+};
+var UTF8ArrayToString = (heapOrArray, idx = 0, maxBytesToRead, ignoreNul) => {
+  var endPtr = findStringEnd(heapOrArray, idx, maxBytesToRead, ignoreNul);
   if (endPtr - idx > 16 && heapOrArray.buffer && UTF8Decoder) {
     return UTF8Decoder.decode(heapOrArray.subarray(idx, endPtr));
   }
@@ -293,8 +297,8 @@ var UTF8ArrayToString = (heapOrArray, idx = 0, maxBytesToRead = NaN) => {
   }
   return str;
 };
-var UTF8ToString = (ptr, maxBytesToRead) =>
-  ptr ? UTF8ArrayToString(HEAPU8, ptr, maxBytesToRead) : "";
+var UTF8ToString = (ptr, maxBytesToRead, ignoreNul) =>
+  ptr ? UTF8ArrayToString(HEAPU8, ptr, maxBytesToRead, ignoreNul) : "";
 var ___assert_fail = (condition, filename, line, func) =>
   abort(
     `Assertion failed: ${UTF8ToString(condition)}, at: ` +
@@ -769,6 +773,10 @@ var MEMFS = {
       }
     },
     lookup(parent, name) {
+      if (!MEMFS.doesNotExistError) {
+        MEMFS.doesNotExistError = new FS.ErrnoError(44);
+        MEMFS.doesNotExistError.stack = "<generic error, no stack>";
+      }
       throw MEMFS.doesNotExistError;
     },
     mknod(parent, name, mode, dev) {
@@ -1108,6 +1116,7 @@ var FS = {
           current_path = PATH.dirname(current_path);
           if (FS.isRoot(current)) {
             path = current_path + "/" + parts.slice(i + 1).join("/");
+            nlinks--;
             continue linkloop;
           } else {
             current = current.parent;
@@ -2645,6 +2654,7 @@ function ___syscall_ioctl(fd, op, varargs) {
         if (!stream.tty) return -59;
         return -28;
       }
+      case 21537:
       case 21531: {
         var argp = syscallGetVarargP();
         return FS.ioctl(stream, op, argp);
@@ -2879,8 +2889,6 @@ var cwrap = (ident, returnType, argTypes, opts) => {
 };
 FS.createPreloadedFile = FS_createPreloadedFile;
 FS.staticInit();
-MEMFS.doesNotExistError = new FS.ErrnoError(44);
-MEMFS.doesNotExistError.stack = "<generic error, no stack>";
 {
   if (Module["noExitRuntime"]) noExitRuntime = Module["noExitRuntime"];
   if (Module["preloadPlugins"]) preloadPlugins = Module["preloadPlugins"];
@@ -2906,6 +2914,7 @@ var _memory_init,
   _getCompiledWebCode,
   _getNumOfErrorMsg,
   _getErrorMsg,
+  _reinitAllAgentData,
   _initWebTimerPtr,
   _initWebClickSTTPtr,
   _getAnAgentDataPtr,
@@ -2926,15 +2935,16 @@ function assignWasmExports(wasmExports) {
   Module["_getCompiledWebCode"] = _getCompiledWebCode = wasmExports["x"];
   Module["_getNumOfErrorMsg"] = _getNumOfErrorMsg = wasmExports["y"];
   Module["_getErrorMsg"] = _getErrorMsg = wasmExports["z"];
-  Module["_initWebTimerPtr"] = _initWebTimerPtr = wasmExports["A"];
-  Module["_initWebClickSTTPtr"] = _initWebClickSTTPtr = wasmExports["B"];
-  Module["_getAnAgentDataPtr"] = _getAnAgentDataPtr = wasmExports["C"];
-  Module["_initALLAgentDataPtr"] = _initALLAgentDataPtr = wasmExports["D"];
+  Module["_reinitAllAgentData"] = _reinitAllAgentData = wasmExports["A"];
+  Module["_initWebTimerPtr"] = _initWebTimerPtr = wasmExports["B"];
+  Module["_initWebClickSTTPtr"] = _initWebClickSTTPtr = wasmExports["C"];
+  Module["_getAnAgentDataPtr"] = _getAnAgentDataPtr = wasmExports["D"];
+  Module["_initALLAgentDataPtr"] = _initALLAgentDataPtr = wasmExports["E"];
   Module["__web_rtc_broadcast_receive_"] = __web_rtc_broadcast_receive_ =
-    wasmExports["E"];
-  __emscripten_stack_restore = wasmExports["F"];
-  __emscripten_stack_alloc = wasmExports["G"];
-  _emscripten_stack_get_current = wasmExports["H"];
+    wasmExports["F"];
+  __emscripten_stack_restore = wasmExports["G"];
+  __emscripten_stack_alloc = wasmExports["H"];
+  _emscripten_stack_get_current = wasmExports["I"];
 }
 var wasmImports = {
   a: ___assert_fail,
