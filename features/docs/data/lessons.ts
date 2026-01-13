@@ -270,8 +270,9 @@ export const lessons: Lesson[] = [
       {
         type: "code",
         filename: "variables.shica",
-        code: '// Variable declaration and initialization\nstr name= "Taro"\nint age = 25\nflo height = 175.5\n' + 
-        'state MyState(){\n    entryEH(){\n        print(name)\n        print(age)\n    }\n}',
+        code:
+          '// Variable declaration and initialization\nstr name= "Taro"\nint age = 25\nflo height = 175.5\n' +
+          "state MyState(){\n    entryEH(){\n        print(name)\n        print(age)\n    }\n}",
       },
       {
         type: "heading",
@@ -305,16 +306,19 @@ export const lessons: Lesson[] = [
       },
       {
         type: "paragraph",
-        text: "Variables in Shica have scope, which determines where they can be accessed. " +
+        text:
+          "Variables in Shica have scope, which determines where they can be accessed. " +
           "Variables declared within a state or event handler are local to that block, while variables declared outside of any state are global and can be accessed from any state or event handler.",
       },
       {
         type: "code",
         filename: "variable_scope.shica",
-        code: '// Variable scope example\nint globalVar = 10; // Global variable\nstate MyState(){\n    int stateLocalVar = 5; // State local variable\n    entryEH(){\n        int localVar = 3; // Local variable\n        print("Global Variable:", globalVar);\n        print("State Local Variable:", stateLocalVar);\n        print("Local Variable:", localVar);\n   }\n   clickEH(int x,int y){\n     print("State local variable:", stateLocalVar);//\n     state AnotherState;\n   }\n}'+
-        '\nstate AnotherState(){\n    entryEH(){\n        // print("State Local Variable:", stateLocalVar); // Error: stateLocalVar is not accessible here\n        print("Global Variable:", globalVar); // Accessible\n    }\n}',
-        output: "Global Variable: 10\nState Local Variable: 5\nLocal Variable: 3\nGlobal Variable: 10",
-      }
+        code:
+          '// Variable scope example\nint globalVar = 10; // Global variable\nstate MyState(){\n    int stateLocalVar = 5; // State local variable\n    entryEH(){\n        int localVar = 3; // Local variable\n        print("Global Variable:", globalVar);\n        print("State Local Variable:", stateLocalVar);\n        print("Local Variable:", localVar);\n   }\n   clickEH(int x,int y){\n     print("State local variable:", stateLocalVar);//\n     state AnotherState;\n   }\n}' +
+          '\nstate AnotherState(){\n    entryEH(){\n        // print("State Local Variable:", stateLocalVar); // Error: stateLocalVar is not accessible here\n        print("Global Variable:", globalVar); // Accessible\n    }\n}',
+        output:
+          "Global Variable: 10\nState Local Variable: 5\nLocal Variable: 3\nGlobal Variable: 10",
+      },
     ],
   },
   {
@@ -430,8 +434,7 @@ export const lessons: Lesson[] = [
       {
         type: "code",
         filename: "position_example.shica",
-        code:
-          "state examplePosition(){\n    entryEH(){\n        setXY(100, 80);\n        print(\"pos =\", getX(), getY());\n\n        setX(120);\n        setY(60);\n        print(\"pos =\", getX(), getY());\n    }\n}",
+        code: 'state examplePosition(){\n    entryEH(){\n        setXY(100, 80);\n        print("pos =", getX(), getY());\n\n        setX(120);\n        setY(60);\n        print("pos =", getX(), getY());\n    }\n}',
         output: "pos = 100 80\n" + "pos = 120 60",
       },
 
@@ -507,7 +510,10 @@ export const lessons: Lesson[] = [
       {
         type: "code",
         filename: "timer_example.shica",
-        code: "state exampleTimer(){\n    timerEH(int sec) {\n" + '        print("tick =", sec);\n' + "    }\n}",
+        code:
+          "state exampleTimer(){\n    timerEH(int sec) {\n" +
+          '        print("tick =", sec);\n' +
+          "    }\n}",
         output: "tick = 1\ntick = 2\n...",
       },
 
@@ -541,10 +547,10 @@ export const lessons: Lesson[] = [
         type: "code",
         filename: "touch_example.shica",
         code:
-        "state exampleTouch(){\n    touchEH(int count) {\n" +
-        "        setColor(255, 255, 255);\n" +
-        '        print("rover touched:", count);\n' +
-        "    }\n}",
+          "state exampleTouch(){\n    touchEH(int count) {\n" +
+          "        setColor(255, 255, 255);\n" +
+          '        print("rover touched:", count);\n' +
+          "    }\n}",
         output: "rover touched: 1\nrover touched: 2\n...",
       },
 
@@ -600,7 +606,7 @@ export const lessons: Lesson[] = [
         filename: "broadcast_example.shica",
         code:
           'var channel = broadcastEO("room1", "pass");\n\n' +
-          'state exampleBroadcast(){\n' +
+          "state exampleBroadcast(){\n" +
           "\tchannel.receivedEH(str addr,str msg) {\n" +
           '        print("received from", addr, ":", msg);\n' +
           "    }\n\n" +
@@ -630,7 +636,7 @@ export const lessons: Lesson[] = [
           '     print("timer s =", s);\n' +
           "     // Example: move rover slowly to the right\n" +
           "     setX(getX() + 1);\n" +
-          "  }\n" + 
+          "  }\n" +
           "  clickEH(int x, int y) {\n" +
           "     t.reset(0); // Reset timer on click\n" +
           "  }\n" +

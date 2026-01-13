@@ -172,10 +172,11 @@ export const userstudy: Lesson[] = [
       {
         type: "hint",
         title: "Hint3: Comment out",
-        code: "//define variable 'currentStateIndex' to manage current state\n" +
-        "define array messages = ['Good morning', 'Good afternoon', 'Good evening'];\n" +
-        "connect click event to the agent element\n" +
-        "",
+        code:
+          "//define variable 'currentStateIndex' to manage current state\n" +
+          "define array messages = ['Good morning', 'Good afternoon', 'Good evening'];\n" +
+          "connect click event to the agent element\n" +
+          "",
       },
     ],
   },
@@ -354,18 +355,18 @@ export const userstudy: Lesson[] = [
       {
         type: "hint",
         title: "Hint3: Comment out",
-        code: 
-        "//define channle variable as new broadcast event object\n" +
-        "state off(){\n\t" + 
-        "__EH(){//trigger when entring this state\n\t//set a color black\n\t}\n" +
-        "\t__EH(type args){//trigger when agent click\n"+
-        "\t\t//state change to on\n\t}\n}\n" +
-        "state on(){\n\t" +
-        "__EH(){//trigger when entering this state\n\t\t//set a color white\n\t\t//send message to channel\n\t}\n" +
-        "\t__EH(type args){//trigger when agent click\n"+
-        "\t\t//state change to off\n\t}\n" +
-        "\tchannel.__EH(type args){//trigger when receiving message from channel\n\t\t//state change to off\n\t}\n" +
-        "}",
+        code:
+          "//define channle variable as new broadcast event object\n" +
+          "state off(){\n\t" +
+          "__EH(){//trigger when entring this state\n\t//set a color black\n\t}\n" +
+          "\t__EH(type args){//trigger when agent click\n" +
+          "\t\t//state change to on\n\t}\n}\n" +
+          "state on(){\n\t" +
+          "__EH(){//trigger when entering this state\n\t\t//set a color white\n\t\t//send message to channel\n\t}\n" +
+          "\t__EH(type args){//trigger when agent click\n" +
+          "\t\t//state change to off\n\t}\n" +
+          "\tchannel.__EH(type args){//trigger when receiving message from channel\n\t\t//state change to off\n\t}\n" +
+          "}",
       },
       {
         type: "heading",
