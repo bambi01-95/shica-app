@@ -656,7 +656,16 @@ const ShicaPage = () => {
   useEffect(() => {
     try {
       const saved = localStorage.getItem("codes");
-      if (saved) setCodes(JSON.parse(saved) as CodeItem[]);
+      if (saved) {
+        const parsed = JSON.parse(saved) as CodeItem[];
+        if (parsed.length > 0)
+          setCodes(parsed.map((item) => ({
+            filename: item.filename,
+            code: item.code,
+            compiled: false,
+          })));
+        else setCodes(initialCodes);
+      }
       const robotsSaved = localStorage.getItem("robots");
       if (robotsSaved) robotsRef.current = JSON.parse(robotsSaved);
     } catch {
