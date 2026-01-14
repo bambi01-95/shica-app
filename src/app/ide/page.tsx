@@ -566,6 +566,13 @@ const ShicaPage = () => {
     }
     setIsRunning(!isRunning);
   };
+  const stopRun = () => {
+    setIsRunning(false);
+    setIsRunInit(false);
+    setCodes((prev =>
+      prev.map((item) => ({ ...item, compiled: false }))
+    ));
+  }
 
   //Event handler for click on the map
   const clickEH = (x: number, y: number) => {
@@ -658,12 +665,15 @@ const ShicaPage = () => {
       const saved = localStorage.getItem("codes");
       if (saved) {
         const parsed = JSON.parse(saved) as CodeItem[];
-        if (parsed.length > 0)
-          setCodes(parsed.map((item) => ({
-            filename: item.filename,
-            code: item.code,
-            compiled: false,
-          })));
+        if (parsed.length > 0){
+          setCodes(
+            parsed.map((item) => ({
+              filename: item.filename,
+              code: item.code,
+              compiled: false,
+            }))
+          );
+        }
         else setCodes(initialCodes);
       }
       const robotsSaved = localStorage.getItem("robots");
@@ -842,10 +852,10 @@ const ShicaPage = () => {
                     : "var(--color-code-text)",
                 }}
               >
-                {isRunning ? "Stop" : "Run"}
+                {isRunning ? "Pause" : "Run"}
               </button>
               <button
-                onClick={compile}
+                onClick={isRunning ? stopRun : compile}
                 disabled={isCompiling}
                 className={`flex items-center space-x-2 px-4 py-2 rounded text-sm font-medium transition-all duration-200 hover:scale-105`}
                 style={{
@@ -857,7 +867,7 @@ const ShicaPage = () => {
                     : "var(--color-code-text)",
                 }}
               >
-                {isCompiling ? "Compiling..." : "Compile"}
+                {isRunning ? "Stop " : isCompiling ? "Compiling..." : "Compile"}
               </button>
               {/* <label
                 htmlFor="fileInput"
