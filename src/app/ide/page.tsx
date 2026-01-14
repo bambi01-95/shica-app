@@ -214,9 +214,12 @@ const ShicaPage = () => {
   const addItem = (newItem: string = "") => {
     setIsRunInit(false); // COMPILER MODE
     setCodes((prev) => [
-      ...prev,
+      ...prev.map((item) => ({
+        ...item,
+        compiled: false,
+      })),
       {
-        filename: `Agent${codes.length}`,
+        filename: `Agent${prev.length}`,
         code: sampleCode,
         compiled: false,
       },
@@ -250,6 +253,8 @@ const ShicaPage = () => {
     } else {
       addLog(LogLevel.SUCCESS, `rm ${codes[index].filename}`);
     }
+    //delet robot
+    robotsRef.current = robotsRef.current.filter((_, i) => i !== index);
     // 選択中のファイルが削除された場合の処理
     if (selectedIndex === index) {
       setSelectedIndex(Math.max(0, index - 1));
@@ -445,6 +450,7 @@ const ShicaPage = () => {
           ["number"],
           [numCodes]
         );
+        console.log("numCodes:", numCodes);
         if (ret !== 0) {
           addLog(
             LogLevel.ERROR,
@@ -579,7 +585,6 @@ const ShicaPage = () => {
     if (!Module || !isReady) return;
     const rect = mapRef.current?.getBoundingClientRect();
     if (!rect) return;
-    console.log(`Click at (${x}, ${y}), rect:`, rect);
     const xc = x - rect.left - 20 < 0 ? 0 : Math.round(x - rect.left - 20);
     const yc = y - rect.top - 20 < 0 ? 0 : Math.round(y - rect.top - 20);
     if (isRunning) {
@@ -701,6 +706,7 @@ const ShicaPage = () => {
     setSelectedIndex(0);
     // Reset robots
     robotsRef.current = [{ x: 25, y: 25, r: 0, g: 0, b: 0 }];
+    window.location.reload();
   };
   // END of Hook declarations
 
