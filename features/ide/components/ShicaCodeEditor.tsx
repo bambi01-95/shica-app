@@ -341,6 +341,10 @@ export const ShicaCodeEditor: React.FC<CodeEditorProps> = ({
               color: "var(--color-text-primary)",
               scrollbarWidth: "none",
               msOverflowStyle: "none",
+              tabSize: 2, 
+              MozTabSize: 2,
+              wordBreak: "normal",
+              overflowWrap: "normal",
             }}
             aria-hidden="true"
           />
@@ -362,6 +366,10 @@ export const ShicaCodeEditor: React.FC<CodeEditorProps> = ({
               scrollbarWidth: "thin",
               scrollbarColor:
                 "var(--color-code-background600) var(--color-code-background900)",
+              tabSize: 2,
+              MozTabSize: 2,
+              wordBreak: "normal",
+              overflowWrap: "normal",
             }}
           />
 
