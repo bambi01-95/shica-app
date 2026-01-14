@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 
 export interface OutputProps {
   width?: string;
@@ -48,8 +48,35 @@ const Output = ({
   logs = [],
   onClear = () => {},
 }: OutputProps) => {
-  const [title, setTitle] = useState("Output");
+  const [title] = useState("Output");
   const outputRef = useRef<HTMLDivElement>(null);
+
+  // ユーザーが下端付近にいるなら自動追従する
+  const [isAutoScroll, setIsAutoScroll] = useState(true);
+
+  // 下端判定の閾値（px）。少し余裕をもたせると体感が良い
+  const BOTTOM_THRESHOLD = 24;
+
+  const scrollToBottom = useCallback(() => {
+    const el = outputRef.current;
+    if (!el) return;
+    el.scrollTop = el.scrollHeight;
+  }, []);
+
+  const handleScroll = useCallback(() => {
+    const el = outputRef.current;
+    if (!el) return;
+
+    // 「下端までの残り距離」が threshold 以下なら下端付近
+    const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+    setIsAutoScroll(distanceFromBottom <= BOTTOM_THRESHOLD);
+  }, []);
+
+  // logs が増えたら（追従中なら）最下部へ
+  useEffect(() => {
+    if (!isAutoScroll) return;
+    scrollToBottom();
+  }, [logs.length, isAutoScroll, scrollToBottom]);
 
   const getLogStyle = (level: LogLevel) => {
     switch (level) {
@@ -81,14 +108,14 @@ const Output = ({
       style={{
         borderColor: "var(--color-code-background700)",
         width,
-        overflow: "hidden", // 重要: 外側コンテナのオーバーフローを防ぐ
+        overflow: "hidden",
       }}
     >
       {/* 固定ヘッダー */}
       <div
         className={`px-4 py-2 ${
           isRounded ? "rounded-t-lg" : ""
-        } flex items-center justify-between shrink-0`} // shrink-0 を追加
+        } flex items-center justify-between shrink-0`}
         style={{
           backgroundColor: "var(--color-background-secondary)",
           color: "var(--color-code-text)",
@@ -102,39 +129,57 @@ const Output = ({
             ({logs.length} logs)
           </span>
         </div>
-        <button
-          onClick={onClear}
-          className="text-xs px-2 py-1 rounded transition-colors hover:bg-opacity-20 hover:bg-white"
-          style={{
-            color: "var(--color-code-text)",
-            backgroundColor: "var(--color-code-background700)",
-          }}
-        >
-          Clear
-        </button>
+
+        <div className="flex items-center gap-2">
+          {/* 任意：追従解除中に「Follow」ボタンを出すと親切 */}
+          {!isAutoScroll && (
+            <button
+              onClick={() => {
+                scrollToBottom();
+                setIsAutoScroll(true);
+              }}
+              className="text-xs px-2 py-1 rounded transition-colors hover:bg-opacity-20 hover:bg-white"
+              style={{
+                color: "var(--color-code-text)",
+                backgroundColor: "var(--color-code-background700)",
+              }}
+            >
+              Follow
+            </button>
+          )}
+          <button
+            onClick={onClear}
+            className="text-xs px-2 py-1 rounded transition-colors hover:bg-opacity-20 hover:bg-white"
+            style={{
+              color: "var(--color-code-text)",
+              backgroundColor: "var(--color-code-background700)",
+            }}
+          >
+            Clear
+          </button>
+        </div>
       </div>
 
       {/* スクロール可能なアウトプットエリア */}
       <div
         ref={outputRef}
-        className="overflow-y-auto min-h-0" // flex-1 と p-4 を削除
+        onScroll={handleScroll}
+        className="overflow-y-auto min-h-0 output-scroll"
         style={{
           backgroundColor: "var(--color-background-primary)",
           color: "var(--color-code-text)",
-          flex: "1 1 0", // flex-1 の代わりに明示的に指定
+          flex: "1 1 0",
         }}
       >
         {logs.length === 0 ? (
           <div
-            className="text-center py-8 px-4" // px-4 を追加
+            className="text-center py-8 px-4"
             style={{ color: "var(--color-code-text-secondary)" }}
           >
             No logs to display
           </div>
         ) : (
           <div className="p-4 pb-2">
-            {" "}
-            {/* ログコンテナを追加、下パディングを小さく */}
             {logs.map((log, index) => (
               <div key={index} className={`mb-1 ${getLogStyle(log.level)}`}>
                 <span
@@ -153,19 +198,19 @@ const Output = ({
         )}
       </div>
 
-      {/* カスタムスクロールバー */}
+      {/* カスタムスクロールバー（クラスを合わせる） */}
       <style jsx>{`
-        .flex-1::-webkit-scrollbar {
+        .output-scroll::-webkit-scrollbar {
           width: 8px;
         }
-        .flex-1::-webkit-scrollbar-track {
+        .output-scroll::-webkit-scrollbar-track {
           background: var(--color-background-primary);
         }
-        .flex-1::-webkit-scrollbar-thumb {
+        .output-scroll::-webkit-scrollbar-thumb {
           background: #4b5563;
           border-radius: 4px;
         }
-        .flex-1::-webkit-scrollbar-thumb:hover {
+        .output-scroll::-webkit-scrollbar-thumb:hover {
           background: #6b7280;
         }
       `}</style>

@@ -214,9 +214,12 @@ const ShicaPage = () => {
   const addItem = (newItem: string = "") => {
     setIsRunInit(false); // COMPILER MODE
     setCodes((prev) => [
-      ...prev,
+      ...prev.map((item) => ({
+        ...item,
+        compiled: false,
+      })),
       {
-        filename: `Agent${codes.length}`,
+        filename: `Agent${prev.length}`,
         code: sampleCode,
         compiled: false,
       },
@@ -250,6 +253,8 @@ const ShicaPage = () => {
     } else {
       addLog(LogLevel.SUCCESS, `rm ${codes[index].filename}`);
     }
+    //delet robot
+    robotsRef.current = robotsRef.current.filter((_, i) => i !== index);
     // 選択中のファイルが削除された場合の処理
     if (selectedIndex === index) {
       setSelectedIndex(Math.max(0, index - 1));
@@ -445,6 +450,7 @@ const ShicaPage = () => {
           ["number"],
           [numCodes]
         );
+        console.log("numCodes:", numCodes);
         if (ret !== 0) {
           addLog(
             LogLevel.ERROR,
@@ -533,38 +539,54 @@ const ShicaPage = () => {
   }, [isRunning, Module, isReady]);
 
   const run = () => {
-    // check all codes are compiled
-    for (let i = 0; i < codes.length; i++) {
-      if (!codes[i].compiled) {
+    // run開始時点のスナップショットで処理する
+    const next = [...codes];
+
+    for (let i = 0; i < next.length; i++) {
+      // console.log(`Checking compilation status of index:${i}`);
+
+      if (!next[i].compiled) {
+        // console.log(`CompileWebCode index:${i}`);
+
         const ret = Module.ccall(
           "compileWebCode",
           "number",
           ["number", "string"],
-          [i, codes[i].code]
+          [i, next[i].code]
         );
+
         if (ret !== 0) {
           addLog(
             LogLevel.ERROR,
-            `run failed - compile error in ${codes[i].filename}`
+            `run failed - compile error in ${next[i].filename}`
           );
           processError();
           return;
-        } else {
-          setCodes((prev) =>
-            prev.map((item, idx) =>
-              idx === i ? { ...item, compiled: true } : item
-            )
-          );
-          addLog(
-            LogLevel.SUCCESS,
-            `shica ${codes[i].filename.replace(/\.shica$/, ".stt")} -o ${
-              codes[i].filename
-            }`
-          );
         }
+
+        // ローカルに反映（ここでは setCodes しない）
+        next[i] = { ...next[i], compiled: true };
+
+        addLog(
+          LogLevel.SUCCESS,
+          `shica ${next[i].filename.replace(/\.shica$/, ".stt")} -o ${
+            next[i].filename
+          }`
+        );
       }
     }
-    setIsRunning(!isRunning);
+
+    // まとめて 1 回だけ更新
+    setCodes(next);
+
+    // これも stale 回避
+    setIsRunning((prev) => !prev);
+  };
+
+  const stopRun = () => {
+    setIsRunning(false);
+    setIsRunInit(false);
+    setCodes((prev) => prev.map((item) => ({ ...item, compiled: false })));
   };
 
   //Event handler for click on the map
@@ -572,7 +594,6 @@ const ShicaPage = () => {
     if (!Module || !isReady) return;
     const rect = mapRef.current?.getBoundingClientRect();
     if (!rect) return;
-    console.log(`Click at (${x}, ${y}), rect:`, rect);
     const xc = x - rect.left - 20 < 0 ? 0 : Math.round(x - rect.left - 20);
     const yc = y - rect.top - 20 < 0 ? 0 : Math.round(y - rect.top - 20);
     if (isRunning) {
@@ -656,7 +677,18 @@ const ShicaPage = () => {
   useEffect(() => {
     try {
       const saved = localStorage.getItem("codes");
-      if (saved) setCodes(JSON.parse(saved) as CodeItem[]);
+      if (saved) {
+        const parsed = JSON.parse(saved) as CodeItem[];
+        if (parsed.length > 0) {
+          setCodes(
+            parsed.map((item) => ({
+              filename: item.filename,
+              code: item.code,
+              compiled: false,
+            }))
+          );
+        } else setCodes(initialCodes);
+      }
       const robotsSaved = localStorage.getItem("robots");
       if (robotsSaved) robotsRef.current = JSON.parse(robotsSaved);
     } catch {
@@ -682,6 +714,7 @@ const ShicaPage = () => {
     setSelectedIndex(0);
     // Reset robots
     robotsRef.current = [{ x: 25, y: 25, r: 0, g: 0, b: 0 }];
+    window.location.reload();
   };
   // END of Hook declarations
 
@@ -833,10 +866,10 @@ const ShicaPage = () => {
                     : "var(--color-code-text)",
                 }}
               >
-                {isRunning ? "Stop" : "Run"}
+                {isRunning ? "Pause" : "Run"}
               </button>
               <button
-                onClick={compile}
+                onClick={isRunning ? stopRun : compile}
                 disabled={isCompiling}
                 className={`flex items-center space-x-2 px-4 py-2 rounded text-sm font-medium transition-all duration-200 hover:scale-105`}
                 style={{
@@ -848,7 +881,7 @@ const ShicaPage = () => {
                     : "var(--color-code-text)",
                 }}
               >
-                {isCompiling ? "Compiling..." : "Compile"}
+                {isRunning ? "Stop " : isCompiling ? "Compiling..." : "Compile"}
               </button>
               {/* <label
                 htmlFor="fileInput"

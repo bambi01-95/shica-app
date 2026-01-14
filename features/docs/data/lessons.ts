@@ -261,7 +261,7 @@ export const lessons: Lesson[] = [
         type: "paragraph",
         text:
           "Shica is statically typed language like C language. You need to declare variable type when you create a variable. " +
-          "Shica supports three basic data types: string, integer, and float.",
+          "Shica supports two basic data types: string and integer",
       },
       {
         type: "heading",
@@ -271,8 +271,8 @@ export const lessons: Lesson[] = [
         type: "code",
         filename: "variables.shica",
         code:
-          '// Variable declaration and initialization\nstr name= "Taro"\nint age = 25\nflo height = 175.5\n' +
-          "state MyState(){\n    entryEH(){\n        print(name)\n        print(age)\n    }\n}",
+          '// Variable declaration and initialization\nstr name= "Taro";\nint age = 25;\n' +
+          "state MyState(){\n    entryEH(){\n        print(name);\n        print(age);\n    }\n}",
       },
       {
         type: "heading",
@@ -280,7 +280,7 @@ export const lessons: Lesson[] = [
       },
       {
         type: "list",
-        items: ['String: "Hello"', "Integer: 42", "Float: 3.14"],
+        items: ['String: "Hello"', "Integer: 42"],
       },
       {
         type: "heading",
@@ -403,8 +403,8 @@ export const lessons: Lesson[] = [
       {
         type: "code",
         filename: "log_example.shica",
-        code: 'state exampleLog(){\n    entryEH(){\n        log("Debug message");\n        log(getX(), getY());\n    }\n}',
-        output: "Debug message\n<current x> <current y>",
+        code: 'state exampleLog(){\n    entryEH(){\n        log("Debug message");\n        log(getX());\n    }\n}',
+        output: "Debug message\n<current x>",
       },
 
       {
@@ -610,7 +610,7 @@ export const lessons: Lesson[] = [
           "\tchannel.receivedEH(str addr,str msg) {\n" +
           '        print("received from", addr, ":", msg);\n' +
           "    }\n\n" +
-          "    clickEH(int count) {\n" +
+          "    clickEH(int x, int y) {\n" +
           '        channel.send("hello");\n' +
           "    }\n}",
         output:
