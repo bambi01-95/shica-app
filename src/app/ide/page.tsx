@@ -539,46 +539,55 @@ const ShicaPage = () => {
   }, [isRunning, Module, isReady]);
 
   const run = () => {
-    // check all codes are compiled
-    for (let i = 0; i < codes.length; i++) {
-      if (!codes[i].compiled) {
+    // run開始時点のスナップショットで処理する
+    const next = [...codes];
+
+    for (let i = 0; i < next.length; i++) {
+      // console.log(`Checking compilation status of index:${i}`);
+
+      if (!next[i].compiled) {
+        // console.log(`CompileWebCode index:${i}`);
+
         const ret = Module.ccall(
           "compileWebCode",
           "number",
           ["number", "string"],
-          [i, codes[i].code]
+          [i, next[i].code]
         );
+
         if (ret !== 0) {
           addLog(
             LogLevel.ERROR,
-            `run failed - compile error in ${codes[i].filename}`
+            `run failed - compile error in ${next[i].filename}`
           );
           processError();
           return;
-        } else {
-          setCodes((prev) =>
-            prev.map((item, idx) =>
-              idx === i ? { ...item, compiled: true } : item
-            )
-          );
-          addLog(
-            LogLevel.SUCCESS,
-            `shica ${codes[i].filename.replace(/\.shica$/, ".stt")} -o ${
-              codes[i].filename
-            }`
-          );
         }
+
+        // ローカルに反映（ここでは setCodes しない）
+        next[i] = { ...next[i], compiled: true };
+
+        addLog(
+          LogLevel.SUCCESS,
+          `shica ${next[i].filename.replace(/\.shica$/, ".stt")} -o ${
+            next[i].filename
+          }`
+        );
       }
     }
-    setIsRunning(!isRunning);
+
+    // まとめて 1 回だけ更新
+    setCodes(next);
+
+    // これも stale 回避
+    setIsRunning((prev) => !prev);
   };
+
   const stopRun = () => {
     setIsRunning(false);
     setIsRunInit(false);
-    setCodes((prev =>
-      prev.map((item) => ({ ...item, compiled: false }))
-    ));
-  }
+    setCodes((prev) => prev.map((item) => ({ ...item, compiled: false })));
+  };
 
   //Event handler for click on the map
   const clickEH = (x: number, y: number) => {
@@ -670,7 +679,7 @@ const ShicaPage = () => {
       const saved = localStorage.getItem("codes");
       if (saved) {
         const parsed = JSON.parse(saved) as CodeItem[];
-        if (parsed.length > 0){
+        if (parsed.length > 0) {
           setCodes(
             parsed.map((item) => ({
               filename: item.filename,
@@ -678,8 +687,7 @@ const ShicaPage = () => {
               compiled: false,
             }))
           );
-        }
-        else setCodes(initialCodes);
+        } else setCodes(initialCodes);
       }
       const robotsSaved = localStorage.getItem("robots");
       if (robotsSaved) robotsRef.current = JSON.parse(robotsSaved);
