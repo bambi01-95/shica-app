@@ -28,7 +28,7 @@ export default function Header({
         <div className="max-w-7xl mx-auto px-6">
           <ul className="flex items-center gap-8 py-4 text-sm md:text-base">
             <NavLink href="/">Home</NavLink>
-            {/* <NavLink href="/user-study">User Study</NavLink> */}
+            <NavLink href="/user-study">User Study</NavLink>
             <NavLink href="/docs">Docs</NavLink>
             <NavLink href="/ide">IDE</NavLink>
           </ul>
