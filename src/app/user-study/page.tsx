@@ -40,13 +40,6 @@ export function UserStudyPage() {
                 totalLessons={userstudy.length}
                 onNavigate={navigate}
               />
-              <p className="text-center text-gray-500 text-lg">
-                User Study page under construction...
-              </p>
-              <p className="text-center text-gray-500 text-lg">
-                Open this page (2026-01-14) again later to see the user study
-                content.
-              </p>
             </article>
           </main>
         </div>

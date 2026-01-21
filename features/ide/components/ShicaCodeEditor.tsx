@@ -30,15 +30,9 @@ export const ShicaCodeEditor: React.FC<CodeEditorProps> = ({
 }) => {
   const [code, setCode] = useState(initialCode);
   const [copied, setCopied] = useState(false);
-  const [lineCount, setLineCount] = useState(1);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const lineNumbersRef = useRef<HTMLDivElement>(null);
   const highlightRef = useRef<HTMLPreElement>(null);
-
-  useEffect(() => {
-    const lines = code.split("\n").length;
-    setLineCount(lines);
-  }, [code]);
 
   // シンタックスハイライトの適用
   const highlightCode = (text: string) => {
@@ -262,7 +256,10 @@ export const ShicaCodeEditor: React.FC<CodeEditorProps> = ({
     }
   }, [code]);
 
-  const lineNumbers = Array.from({ length: lineCount }, (_, i) => i + 1);
+  const lineNumbers = Array.from(
+    { length: code.split("\n").length },
+    (_, i) => i + 1
+  );
 
   return (
     <div
@@ -337,14 +334,19 @@ export const ShicaCodeEditor: React.FC<CodeEditorProps> = ({
             className={`${robotoMono.className} absolute top-0 left-0 w-full h-full p-4 font-mono text-sm leading-6 pointer-events-none overflow-auto whitespace-pre`}
             style={{
               margin: 0,
+              padding: "1rem",
               background: "transparent",
               color: "var(--color-text-primary)",
               scrollbarWidth: "none",
               msOverflowStyle: "none",
-              tabSize: 2, 
+              tabSize: 2,
               MozTabSize: 2,
-              wordBreak: "normal",
+              wordBreak: "keep-all",
               overflowWrap: "normal",
+              whiteSpace: "pre",
+              letterSpacing: "normal",
+              fontFeatureSettings: "normal",
+              fontVariantLigatures: "none",
             }}
             aria-hidden="true"
           />
@@ -360,6 +362,7 @@ export const ShicaCodeEditor: React.FC<CodeEditorProps> = ({
             placeholder="Write your code here..."
             spellCheck={false}
             style={{
+              padding: "1rem",
               background: "transparent",
               color: "transparent",
               caretColor: "var(--color-text-primary)",
@@ -368,8 +371,12 @@ export const ShicaCodeEditor: React.FC<CodeEditorProps> = ({
                 "var(--color-code-background600) var(--color-code-background900)",
               tabSize: 2,
               MozTabSize: 2,
-              wordBreak: "normal",
+              wordBreak: "keep-all",
               overflowWrap: "normal",
+              whiteSpace: "pre",
+              letterSpacing: "normal",
+              fontFeatureSettings: "normal",
+              fontVariantLigatures: "none",
             }}
           />
 
@@ -405,7 +412,7 @@ export const ShicaCodeEditor: React.FC<CodeEditorProps> = ({
         }}
       >
         <div className="flex space-x-4">
-          <span>Lines: {lineCount}</span>
+          <span>Lines: {code.split("\n").length}</span>
           <span>Chars: {code.length}</span>
         </div>
         <div className="flex space-x-2">
