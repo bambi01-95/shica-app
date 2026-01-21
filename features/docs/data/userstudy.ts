@@ -2,6 +2,49 @@ import { Lesson } from "../types/lesson";
 
 export const userstudy: Lesson[] = [
   {
+    id: -1,
+    title: "Don't move next lesson before starting user study!",
+    content: [
+      {
+        type: "heading",
+        text: "User Study Overview",
+      },
+      {
+        type: "list",
+        items: [
+          "section 1: Introduction (10 minutes)",
+          "section 2: Tasks using W-Shica (40 minutes)",
+          "section 3: Tasks using JavaScript (40 minutes)",
+          "section 4: Questionnaire (10 minutes)",
+        ],
+      },
+      {
+        type: "heading",
+        text: "Onsite User Study Instructions",
+      },
+      {
+        type: "paragraph",
+        text:
+          "Please wait for the facilitator to start the user study. " +
+          "Once the study begins, you can proceed to the next lesson to start the tasks.",
+      },
+      {
+        type: "heading",
+        text: "Online User Study Instructions",
+      },
+      {
+        type: "paragraph",
+        text:
+          "If you join this user study online, you don't have to following time schedule strictly, " +
+          "but please try to do section 2 and 3 within 40 minutes each or same time you use for W-Shica and JavaScript.",
+      },
+      {
+        type: "heading",
+        text: "Thank you for your cooperation!",
+      },
+    ],
+  },
+  {
     id: 0,
     title: "W-Shica User Study",
     content: [
@@ -44,15 +87,31 @@ export const userstudy: Lesson[] = [
       },
       {
         type: "heading",
-        text: "schedule",
+        text: "Schedule",
       },
       {
         type: "list",
         items: [
-          "00:00 – 00:10  Introduction",
-          "00:10 – 00:50  Tasks using W-Shica",
-          "00:50 – 01:30  Tasks using JavaScript",
-          "01:30 – 01:40  Questionnaire",
+          "00:00 - 00:10  Introduction",
+          "00:10 - 00:50  Tasks using W-Shica",
+          "00:50 - 01:30  Tasks using JavaScript",
+          "01:30 - 01:40  Questionnaire",
+        ],
+      },
+      {
+        type: "heading",
+        text: "Tasks Overview",
+      },
+      {
+        type: "paragraph",
+        text: " You will work on the following three tasks in each programming environment:",
+      },
+      {
+        type: "list",
+        items: [
+          "Task 1 (12 minutes): Greeting - An agent that changes its greeting message based on the time of day.",
+          "Task 2 (13 minutes): Particle - An agent that moves continuously and stops temporarily when clicked.",
+          "Task 3 (15 minutes): Radio Button Group - Multiple agents that behave like radio buttons, allowing only one to be selected at a time.",
         ],
       },
       {
@@ -289,7 +348,9 @@ export const userstudy: Lesson[] = [
       {
         type: "code",
         filename: "index.html",
-        code: '<div id="map">\n\t<div class="robot-vacuum"></div>\n</div>',
+        code: `<div id="map">
+	<div class="robot-vacuum" id="agent1"></div>
+</div>`,
       },
       {
         type: "hint",
@@ -304,7 +365,7 @@ export const userstudy: Lesson[] = [
       {
         type: "code",
         filename: "styles.css",
-        code: '#map {\n\tposition: relative;\n\twidth: 500px;\n\theight: 500px;\n\tborder: 1px solid #ccc;\n\tbackground-color: #f9f9f9;\n\tbackground-image: linear-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.08) 1px, transparent 1px);\n\tbackground-size: 20px 20px;\n\tcursor: crosshair;\n}\n\n.robot-vacuum {\n\tposition: absolute;\n\tleft: 0;\n\ttop: 0;\n\twidth: 50px;\n\theight: 50px;\n\ttransition: all 0.05s linear;\n\twill-change: transform;\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n\tbackground: linear-gradient(135deg, #2c3e50, #34495e);\n\tborder-radius: 50%;\n\tborder: 3px solid #000;\n\tbox-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);\n}\n\n.robot-vacuum::before {\n\tcontent: "";\n\tposition: absolute;\n\twidth: 20px;\n\theight: 20px;\n\tbackground: #000;\n\tborder-radius: 50%;\n\ttop: 50%;\n\tleft: 50%;\n\ttransform: translate(-50%, -50%);\n\tbox-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);\n}\n\n.robot-vacuum::after {\n\tcontent: "";\n\tposition: absolute;\n\twidth: 8px;\n\theight: 8px;\n\tbackground: #e74c3c;\n\tborder-radius: 50%;\n\ttop: 25%;\n\tleft: 50%;\n\ttransform: translate(-50%, -50%);\n\tanimation: blink 2s infinite;\n}\n\n@keyframes blink {\n\t0%, 100% { opacity: 1; }\n\t50% { opacity: 0.2; }\n}\n',
+        code: '#map {\n\tposition: relative;\n\twidth: 500px;\n\theight: 500px;\n\tborder: 1px solid #ccc;\n\tbackground-color: #f9f9f9;\n\tbackground-image: linear-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px), \n\tlinear-gradient(90deg, rgba(0, 0, 0, 0.08) 1px, transparent 1px);\n\tbackground-size: 20px 20px;\n\tcursor: crosshair;\n}\n\n.robot-vacuum {\n\tposition: absolute;\n\tleft: 0;\n\ttop: 0;\n\twidth: 50px;\n\theight: 50px;\n\ttransition: all 0.05s linear;\n\twill-change: transform;\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n\tbackground: linear-gradient(135deg, #2c3e50, #34495e);\n\tborder-radius: 50%;\n\tborder: 3px solid #000;\n\tbox-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);\n}\n\n.robot-vacuum::before {\n\tcontent: "";\n\tposition: absolute;\n\twidth: 20px;\n\theight: 20px;\n\tbackground: #000;\n\tborder-radius: 50%;\n\ttop: 50%;\n\tleft: 50%;\n\ttransform: translate(-50%, -50%);\n\tbox-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);\n}\n\n.robot-vacuum::after {\n\tcontent: "";\n\tposition: absolute;\n\twidth: 8px;\n\theight: 8px;\n\tbackground: #e74c3c;\n\tborder-radius: 50%;\n\ttop: 25%;\n\tleft: 50%;\n\ttransform: translate(-50%, -50%);\n\tanimation: blink 2s infinite;\n}\n\n@keyframes blink {\n\t0%, 100% { opacity: 1; }\n\t50% { opacity: 0.2; }\n}\n',
       },
     ],
   },
@@ -413,16 +474,16 @@ state exampleState(){
     }
 }`,
       },
-      {
-        type: "hint",
-        title:
-          "WARN: Only open this if you have absolutely no idea what to do.",
-        text: "You can structure your code as follows:",
-        code:
-          "state morining(){\n\t// timerEH(int sec) {\n\t    //If 5 seconds have passed\n\t\t// state transition to next state\n\t// }\n\n\t// clickEH(int x, int y) {\n\t//     //print out message\n\t// }\n}" +
-          "\nstate afternoon(){\n\t//similar to morning state\n}" +
-          "\nstate evening(){\n\t//similar to morning state\n}",
-      },
+      // {
+      //   type: "hint",
+      //   title:
+      //     "WARN: Only open this if you have absolutely no idea what to do.",
+      //   text: "You can structure your code as follows:",
+      //   code:
+      //     "state morining(){\n\t// timerEH(int sec) {\n\t    //If 5 seconds have passed\n\t\t// state transition to next state\n\t// }\n\n\t// clickEH(int x, int y) {\n\t//     //print out message\n\t// }\n}" +
+      //     "\nstate afternoon(){\n\t//similar to morning state\n}" +
+      //     "\nstate evening(){\n\t//similar to morning state\n}",
+      // },
       {
         type: "heading",
         text: "Hint task 2", //task 2
@@ -438,10 +499,9 @@ state exampleState(){
           "You can starting from following steps" +
           "(You can see the example code at <a href='/docs/'><u>docs</u></a> > event features)",
         items: [
-          "How many state you need.",
-          "What event handlers to define in each state.",
-          "How to manage velocity and position of the agent.",
-          "How to handle timing for stopping and resuming movement.",
+          "Make code for continuous movement first.",
+          "Make state state change code by click event.",
+          "Make timer event code to restart movement after 3 seconds.",
         ],
       },
 
@@ -481,18 +541,18 @@ state movingState(){
     }
 }`,
       },
-      {
-        type: "hint",
-        title:
-          "WARN: Only open this if you have absolutely no idea what to do.",
-        code:
-          "//define vx (velocity in x direction)\n//define vy (velocity in y direction)\n" +
-          "state movingState(){\n\t____EH(){//trigger when entering this state\n\t\t//set velocity (vx, vy);\n\t}\n\t____EH(type args){\n\t\t//if x direction is collision\n\t\t\t//reverse x velocity\n\t\t//if y direction is collision\n\t\t\t//reverse y velocity\n\t}\n\t____EH(type args){//trigger when touch\n\t\t//state change to stoppedState\n\t}\n}" +
-          "\nstate stoppedState(){\n\tentryEH(){\n\t\t//store current velocity\n\t\t//set velocity(0, 0);\n\t}\n\ttimerEH(int sec){//Define time event handler here" +
-          "\n\t\t//if 3 seconds left" +
-          "\n\t\t\t//state transition movingState\n\t}" +
-          "\n}",
-      },
+      // {
+      //   type: "hint",
+      //   title:
+      //     "WARN: Only open this if you have absolutely no idea what to do.",
+      //   code:
+      //     "//define vx (velocity in x direction)\n//define vy (velocity in y direction)\n" +
+      //     "state movingState(){\n\t____EH(){//trigger when entering this state\n\t\t//set velocity (vx, vy);\n\t}\n\t____EH(type args){\n\t\t//if x direction is collision\n\t\t\t//reverse x velocity\n\t\t//if y direction is collision\n\t\t\t//reverse y velocity\n\t}\n\t____EH(type args){//trigger when touch\n\t\t//state change to stoppedState\n\t}\n}" +
+      //     "\nstate stoppedState(){\n\tentryEH(){\n\t\t//store current velocity\n\t\t//set velocity(0, 0);\n\t}\n\ttimerEH(int sec){//Define time event handler here" +
+      //     "\n\t\t//if 3 seconds left" +
+      //     "\n\t\t\t//state transition movingState\n\t}" +
+      //     "\n}",
+      // },
       {
         type: "heading",
         text: "Hint task 3",
@@ -512,10 +572,10 @@ state movingState(){
           "You can add agent by click add file. But you should consider the following points:" +
           " (You can see the example code at <a href='/docs/'><u>docs</u></a> > distributed features)",
         items: [
-          "How many state you need.",
-          "What event handlers to define in each state.",
-          "How to use broadcast event objects for inter-agent communication.",
-          "All agents program is same or not.",
+          "Make one agent code first.",
+          "Make state state change code by click event.",
+          "Add broadcast event object to communicate between agents.",
+          "Add two other angents by click 'add file' button.",
         ],
       },
       {
@@ -557,23 +617,23 @@ state colorChange(){
     }
 }`,
       },
-      {
-        type: "hint",
-        title:
-          "WARN: Only open this if you have absolutely no idea what to do.",
-        code:
-          "//define channle variable as new broadcast event object\n" +
-          "state off(){\n\t" +
-          "__EH(){//trigger when entring this state\n\t//set a color black\n\t}\n" +
-          "\t__EH(type args){//trigger when agent click\n" +
-          "\t\t//state change to on\n\t}\n}\n" +
-          "state on(){\n\t" +
-          "__EH(){//trigger when entering this state\n\t\t//set a color white\n\t\t//send message to channel\n\t}\n" +
-          "\t__EH(type args){//trigger when agent click\n" +
-          "\t\t//state change to off\n\t}\n" +
-          "\tchannel.__EH(type args){//trigger when receiving message from channel\n\t\t//state change to off\n\t}\n" +
-          "}",
-      },
+      // {
+      //   type: "hint",
+      //   title:
+      //     "WARN: Only open this if you have absolutely no idea what to do.",
+      //   code:
+      //     "//define channle variable as new broadcast event object\n" +
+      //     "state off(){\n\t" +
+      //     "__EH(){//trigger when entring this state\n\t//set a color black\n\t}\n" +
+      //     "\t__EH(type args){//trigger when agent click\n" +
+      //     "\t\t//state change to on\n\t}\n}\n" +
+      //     "state on(){\n\t" +
+      //     "__EH(){//trigger when entering this state\n\t\t//set a color white\n\t\t//send message to channel\n\t}\n" +
+      //     "\t__EH(type args){//trigger when agent click\n" +
+      //     "\t\t//state change to off\n\t}\n" +
+      //     "\tchannel.__EH(type args){//trigger when receiving message from channel\n\t\t//state change to off\n\t}\n" +
+      //     "}",
+      // },
     ],
   },
   ///////////////////////////////////// JavaScript Example
@@ -639,7 +699,7 @@ setInterval(switchNextState, 1000);
 const agent = document.getElementById("agent1");
 agent.addEventListener("click", function() {
       console.log("Agent 1 clicked");
-}`,
+});`,
         output: "Agent 1 clicked\nAgent 1 clicked\n...",
       },
       {
@@ -654,7 +714,7 @@ agent.addEventListener("click", function() {
         type: "hint",
         title: "CSS code",
         text: "Agent (robot vacuum) style code. Agent size is (50x,50px). and Map size is (500x,500px).",
-        code: '#map {\n\tposition: relative;\n\twidth: 500px;\n\theight: 500px;\n\tborder: 1px solid #ccc;\n\tbackground-color: #f9f9f9;\n\tbackground-image: linear-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px), \n\tlinear-gradient(90deg, rgba(0, 0, 0, 0.08) 1px, transparent 1px);\n\tbackground-size: 20px 20px;\n\tcursor: crosshair;\n}\n\n.robot-vacuum {\n\tposition: absolute;\n\tleft: 0;\n\ttop: 0;\n\twidth: 50px;\n\theight: 50px;\n\ttransition: all 0.05s linear;\n\twill-change: transform;\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n\tbackground: linear-gradient(135deg, #2c3e50, #34495e);\n\tborder-radius: 50%;\n\tborder: 3px solid #000;\n\tbox-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);\n}\n\n.robot-vacuum::before {\n\tcontent: "";\n\tposition: absolute;\n\twidth: 20px;\n\theight: 20px;\n\tbackground: #000;\n\tborder-radius: 50%;\n\ttop: 50%;\n\tleft: 50%;\n\ttransform: translate(-50%, -50%);\n\tbox-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);\n}\n\n.robot-vacuum::after {\n\tcontent: "";\n\tposition: absolute;\n\twidth: 8px;\n\theight: 8px;\n\tbackground: #e74c3c;\n\tborder-radius: 50%;\n\ttop: 25%;\n\tleft: 50%;\n\ttransform: translate(-50%, -50%);\n\tanimation: blink 2s infinite;\n}\n\n@keyframes blink {\n\t0%, 100% { opacity: 1; }\n\t50% { opacity: 0.2; }\n}\n',
+        code: `#map {\n\tposition: relative;\n\twidth: 500px;\n\theight: 500px;\n\tborder: 1px solid #ccc;\n\tbackground-color: #f9f9f9;\n\tbackground-image: linear-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px), \n\n\tlinear-gradient(90deg, rgba(0, 0, 0, 0.08) 1px, transparent 1px);\n\tbackground-size: 20px 20px;\n\tcursor: crosshair;\n}\n\n.robot-vacuum {\n\tposition: absolute;\n\tleft: 0;\n\ttop: 0;\n\twidth: 50px;\n\theight: 50px;\n\ttransition: all 0.05s linear;\n\twill-change: transform;\n\tdisplay: flex;\n\talign-items: center;\n\tjustify-content: center;\n\tbackground: linear-gradient(135deg, #2c3e50, #34495e);\n\tborder-radius: 50%;\n\tborder: 3px solid #000;\n\tbox-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);\n}\n\n.robot-vacuum::before {\n\tcontent: "";\n\tposition: absolute;\n\twidth: 20px;\n\theight: 20px;\n\tbackground: #000;\n\tborder-radius: 50%;\n\ttop: 50%;\n\tleft: 50%;\n\ttransform: translate(-50%, -50%);\n\tbox-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);\n}\n\n.robot-vacuum::after {\n\tcontent: "";\n\tposition: absolute;\n\twidth: 8px;\n\theight: 8px;\n\tbackground: #e74c3c;\n\tborder-radius: 50%;\n\ttop: 25%;\n\tleft: 50%;\n\ttransform: translate(-50%, -50%);\n\tanimation: blink 2s infinite;\n}\n\n@keyframes blink {\n\t0%, 100% { opacity: 1; }\n\t50% { opacity: 0.2; }\n}\n`,
       },
       {
         type: "paragraph",
@@ -666,10 +726,11 @@ agent.addEventListener("click", function() {
       {
         type: "code",
         filename: "time.js",
-        code: `//2 second logging
+        code: `//set interval example
 const logging = () => {
   console.log("2 second")
 };
+// Call logging every 2 seconds
 setInterval(logging, 2000);
 `,
         output: "2 second\n2 second\n...",
@@ -695,6 +756,19 @@ setInterval(logging, 2000);
           "Step2: Handle boundary condition of the map.",
           "Step3: Handle click event to stop and resume movement.",
         ],
+      },
+      {
+        type: "paragraph",
+        text: "",
+      },
+      {
+        type: "code",
+        filename: "time_out.js",
+        code: `//set time out example
+//implement inside code after 3 seconds
+setTimeout (()=> {
+    console.log("3 seconds passed");
+} ,3000);`,
       },
       {
         type: "paragraph",
